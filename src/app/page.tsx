@@ -16,6 +16,7 @@ import UserProfileModal from "../components/UserProfileModal";
 import WhisperingWellModal from "../components/WhisperingWellModal";
 import AiFloatingOrb from "../components/AiFloatingOrb";
 import LibraryFloatingOrb from "../components/LibraryFloatingOrb";
+import SanctuaryIntro from "../components/SanctuaryIntro";
 import CreatorIntelPulse from "../components/CreatorIntelPulse";
 import { useSoulProfile } from "../lib/useSoulProfile";
 import { INITIAL_LETTERS } from "../lib/initialStars";
@@ -222,6 +223,9 @@ export default function HomePage() {
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenWell={() => setIsWellOpen(true)}
       />
+
+      {/* Poetic homepage intro — visible h1 + sanctuary pathways (SEO) */}
+      <SanctuaryIntro />
 
       {/* Daily Presence Streak Capsule (Floating Bottom-Left) */}
       <SacredStreakBanner
