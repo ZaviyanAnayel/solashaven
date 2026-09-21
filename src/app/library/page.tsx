@@ -17,6 +17,7 @@ import {
   Compass,
   ScrollText
 } from "lucide-react";
+import StarCursorTrail from "../../components/StarCursorTrail";
 
 export default function LibraryCatalogPage() {
   const [selectedEra, setSelectedEra] = useState<string>("All Eras");
@@ -28,6 +29,8 @@ export default function LibraryCatalogPage() {
 
   return (
     <div className="min-h-screen bg-[#020204] text-white selection:bg-amber-400/30 selection:text-amber-100 font-sans">
+      {/* Celestial cursor — golden star trail following the pointer */}
+      <StarCursorTrail />
       {/* Top Navigation Header */}
       <header className="border-b border-white/10 bg-black/60 backdrop-blur-xl sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
