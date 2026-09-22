@@ -116,6 +116,7 @@ export const metadata: Metadata = {
 };
 
 import Script from "next/script";
+import StarCursorTrail from "../components/StarCursorTrail";
 
 export default function RootLayout({
   children,
@@ -190,6 +191,8 @@ export default function RootLayout({
         />
 
         {children}
+        {/* Site-wide celestial star cursor trail (all pages) */}
+        <StarCursorTrail />
       </body>
     </html>
   );
