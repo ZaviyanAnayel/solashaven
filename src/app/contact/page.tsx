@@ -22,6 +22,20 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !message.trim()) return;
+    // Actually send: compose a prefilled email to the Zaviyan desk via the
+    // visitor's own email client (no backend — never pretend a message was sent).
+    const topicLabel =
+      {
+        general: "General Feedback / Inquiry",
+        removal: "Content / Star Removal Request",
+        partnership: "Partnership & Media",
+        technical: "Bug / Technical Issue",
+      }[subject] || subject;
+    const mailto =
+      `mailto:business@zaviyanllc.com` +
+      `?subject=${encodeURIComponent(`[SolasHaven] ${topicLabel}`)}` +
+      `&body=${encodeURIComponent(`From: ${email.trim()}\nTopic: ${topicLabel}\n\n${message.trim()}`)}`;
+    window.location.href = mailto;
     setSubmitted(true);
   };
 
@@ -110,9 +124,10 @@ export default function ContactPage() {
           {submitted ? (
             <div className="p-6 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-center animate-fade-in">
               <Sparkles className="w-6 h-6 text-emerald-300 mx-auto mb-2" />
-              <h4 className="text-sm font-semibold text-emerald-200 mb-1">Message Received</h4>
+              <h4 className="text-sm font-semibold text-emerald-200 mb-1">Message Ready to Send</h4>
               <p className="text-xs text-emerald-300/80 max-w-sm mx-auto">
-                Thank you. Our team at Zaviyan will review your message and respond within 24 to 48 hours.
+                Your email app should now open with your message addressed to our team at Zaviyan. Just press send there.
+                If nothing opened, email us directly at business@zaviyanllc.com.
               </p>
             </div>
           ) : (

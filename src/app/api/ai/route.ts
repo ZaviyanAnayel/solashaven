@@ -6,6 +6,38 @@ const GROQ_API_KEY = process.env.GROQ_API_KEY?.trim() || "";
 const PRIMARY_MODEL = "qwen/qwen3-32b";
 const FALLBACK_MODEL = "openai/gpt-oss-120b";
 
+// ---- Lightweight in-memory rate limiting (per server instance) ----
+// /api/ai is unauthenticated by design (anonymous sanctuary), so bound
+// per-IP request rate to blunt abuse. Limits: 40 requests / minute / IP.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX = 40;
+const MAX_BODY_BYTES = 512 * 1024; // 512 KB — generous ceiling for chronicle drafts
+const rateLimitBuckets = new Map<string, { count: number; windowStart: number }>();
+
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return req.headers.get("x-real-ip")?.trim() || "unknown";
+}
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter: number } {
+  const now = Date.now();
+  const bucket = rateLimitBuckets.get(ip);
+  if (!bucket || now - bucket.windowStart >= RATE_LIMIT_WINDOW_MS) {
+    rateLimitBuckets.set(ip, { count: 1, windowStart: now });
+    if (rateLimitBuckets.size > 5000) rateLimitBuckets.clear();
+    return { allowed: true, retryAfter: 0 };
+  }
+  if (bucket.count >= RATE_LIMIT_MAX) {
+    return {
+      allowed: false,
+      retryAfter: Math.max(1, Math.ceil((bucket.windowStart + RATE_LIMIT_WINDOW_MS - now) / 1000)),
+    };
+  }
+  bucket.count += 1;
+  return { allowed: true, retryAfter: 0 };
+}
+
 async function callGroq(
   messages: Array<{ role: string; content: string }>,
   maxTokens = 450,
@@ -198,6 +230,20 @@ CRITICAL PROTOCOL FOR SENSITIVE / CRISIS CONVERSATIONS:
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit + body-size guard before any parsing/LLM spend
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(clientIp);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please rest a moment and try again." },
+        { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+      );
+    }
+    const contentLength = Number(req.headers.get("content-length") || "0");
+    if (contentLength > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+
     const body = await req.json();
     const { action } = body;
 
