@@ -5,9 +5,9 @@ export const RUMI_MASNAVI: LibraryBook = {
   title: "The Masnavi: Spiritual Couplets & Mystic Odes",
   author: "Jalāl al-Dīn Muḥammad Rūmī",
   year: "c. 1260 AD",
-  translator: "E. H. Whinfield & R. A. Nicholson",
+  translator: "E. H. Whinfield (1898); selections in modern English renderings",
   category: "Persian & Sufi Mysticism",
-  readTime: "1 hr 15 min read",
+  readTime: "12 min read",
   coverGradient: "from-amber-950/40 via-teal-950/30 to-neutral-950",
   accentColor: "#14b8a6",
   description:
@@ -15,7 +15,7 @@ export const RUMI_MASNAVI: LibraryBook = {
   quote:
     "Hearken to the reed-flute, how it complains, / Lamenting its banishment from its home: / 'Ever since they tore me from the reed-bed, / My lament has caused men and women to weep... / Everyone who is left far from his source / Wishes back the days when he was united with it.'",
   publicDomainNotice:
-    "Composed in Konya, Anatolia c. 1258–1273 AD. English translations by E.H. Whinfield (1887) and R.A. Nicholson (1898–1926). In the public domain worldwide.",
+    "Composed in Konya, Anatolia c. 1258–1273 — Persian original in the public domain. Opening verse after R.A. Nicholson; selected passages in modern English renderings for contemporary readers.",
   chapters: [
     {
       id: "song-of-the-reed",
@@ -59,7 +59,6 @@ export const RUMI_MASNAVI: LibraryBook = {
       content: [
         "Out beyond ideas of wrongdoing and rightdoing, there is a field. I'll meet you there.",
         "When the soul lies down in that grass, the world is too full to talk about. Ideas, language, even the phrase 'each other' doesn't make any sense anymore.",
-        "You were born with potential. You were born with goodness and trust. You were born with ideals and dreams. You were born with greatness. You were born with wings. You are not meant for crawling, so don't. Learn to use them and fly.",
         "Let the beauty of what you love be what you do. There are a thousand ways to kneel and kiss the ground."
       ],
     }

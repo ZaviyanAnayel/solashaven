@@ -11,6 +11,12 @@ on:
 permissions:
   contents: write
 
+# Prevent overlapping runs (e.g. a manual dispatch colliding with the
+# scheduled run) from appending duplicate chronicles or failing the push.
+concurrency:
+  group: solas-seo-agent
+  cancel-in-progress: true
+
 jobs:
   generate-chronicle:
     runs-on: ubuntu-latest

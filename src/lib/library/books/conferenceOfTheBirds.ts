@@ -5,9 +5,9 @@ export const CONFERENCE_OF_THE_BIRDS: LibraryBook = {
   title: "The Conference of the Birds (Manṭiq-uṭ-Ṭayr)",
   author: "Farīd al-Dīn ‘Aṭṭār",
   year: "c. 1177 AD",
-  translator: "Edward FitzGerald & C. S. Nott",
+  translator: "Edward FitzGerald (1889); prose retold in modern English for the Sanctuary",
   category: "Persian & Sufi Mysticism",
-  readTime: "1 hr 10 min read",
+  readTime: "12 min read",
   coverGradient: "from-indigo-950/40 via-violet-950/30 to-neutral-950",
   accentColor: "#8b5cf6",
   description:
@@ -15,7 +15,7 @@ export const CONFERENCE_OF_THE_BIRDS: LibraryBook = {
   quote:
     "They gazed, and dared not at that mystery reason, / Until, like Stars out-shining in the Sky, / They saw: they thirty birds—and the King was Thirty Birds (Si-morgh)! / The Sun of Nearness shone, and their own selves were the Light they sought.",
   publicDomainNotice:
-    "Written in Nishapur, Persia c. 1177 AD. Renderings and translations by Edward FitzGerald (1889) and early English translators. In the public domain worldwide.",
+    "Persian original composed c. 1177 in Nishapur — in the public domain worldwide. Verse selections after Edward FitzGerald (1889); prose chapters retold in modern English for contemporary readers.",
   chapters: [
     {
       id: "the-assembly-and-the-hoopoe",
