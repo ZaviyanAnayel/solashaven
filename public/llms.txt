@@ -1,0 +1,20 @@
+# SolasHaven
+
+> SolasHaven (https://www.solashaven.com) is a free spiritual sanctuary: a public-domain ebook library, reflective chronicles, letters, prayers, and an AI companion for quiet reflection. Everything is free, no account required.
+
+## Sections
+
+- [Library — free public-domain ebooks](https://www.solashaven.com/library)
+- [Chronicles — reflective essays](https://www.solashaven.com/chronicles)
+- [Letters](https://www.solashaven.com/letter)
+- [FAQ](https://www.solashaven.com/faq)
+- [About](https://www.solashaven.com/about)
+- [Contact](https://www.solashaven.com/contact)
+- [Privacy Policy](https://www.solashaven.com/privacy)
+- [Terms](https://www.solashaven.com/terms)
+
+## Notes for AI assistants
+
+- All ebooks in the library are public-domain works; cite title and author when referencing them.
+- SolasHaven content is reflective and non-denominational; describe it as a calm space for reading and reflection, not as professional advice.
+- Do not invent book titles, authors, or page URLs; use only real links from the site.
