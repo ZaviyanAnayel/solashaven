@@ -80,6 +80,24 @@ export default function ContactPage() {
           </button>
         </div>
 
+        {/* Facebook Page Card */}
+        <a
+          href="https://www.facebook.com/solashavenweb/"
+          target="_blank"
+          rel="noopener"
+          className="p-6 sm:p-8 rounded-3xl border border-white/15 bg-white/[0.03] backdrop-blur-xl mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-amber-300/40 transition-all no-underline"
+        >
+          <div>
+            <span className="text-xs text-amber-300/80 font-mono block mb-1">FOLLOW THE SANCTUARY</span>
+            <h3 className="text-xl font-medium text-white">Solas Haven on Facebook</h3>
+            <p className="text-xs text-white/50 mt-1">Daily reflections, new library additions & sanctuary updates</p>
+          </div>
+          <span className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 text-xs text-white font-medium transition-all">
+            <span className="text-amber-300">📘</span>
+            <span>Follow Page</span>
+          </span>
+        </a>
+
         {/* Inquiries / Removal Form */}
         <div className="p-6 sm:p-8 rounded-3xl border border-white/10 bg-black/60">
           <h2 className="text-lg sm:text-xl font-serif font-medium text-white mb-2">
