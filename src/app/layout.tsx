@@ -113,6 +113,9 @@ export const metadata: Metadata = {
     },
   },
   category: "Emotional & Spiritual Well-being",
+  other: {
+    "p:domain_verify": "b474814a22fe606c6be4fb87d327e09a",
+  },
 };
 
 import Script from "next/script";
