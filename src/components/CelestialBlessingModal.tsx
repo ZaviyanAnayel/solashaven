@@ -73,9 +73,10 @@ export default function CelestialBlessingModal({
 
   if (!letter) return null;
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     const textToCopy = bespokeEcho || affirmation.prayer;
-    navigator.clipboard?.writeText(textToCopy);
+    const { copyToClipboard } = await import("@/utils/clipboard");
+    await copyToClipboard(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

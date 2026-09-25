@@ -130,13 +130,12 @@ export default function LetterReaderModal({
     onSendLight(letter.id);
   };
 
-  const handleCopyLink = () => {
+  const handleCopyLink = async () => {
     const url = typeof window !== "undefined" ? `${window.location.origin}/letter/${letter.id}` : "";
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(url);
-      setHasCopied(true);
-      setTimeout(() => setHasCopied(false), 2000);
-    }
+    const { copyToClipboard } = await import("@/utils/clipboard");
+    await copyToClipboard(url);
+    setHasCopied(true);
+    setTimeout(() => setHasCopied(false), 2000);
   };
 
   const handleSelectPresetPrayer = (prayerText: string, emoji: string) => {

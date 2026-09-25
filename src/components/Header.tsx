@@ -811,6 +811,14 @@ export default function Header({
                 <span>•</span>
                 <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-300 transition-colors">Contact</Link>
               </div>
+
+              {/* Zaviyan Ecosystem Sister Platforms */}
+              <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-center gap-3 text-[10px] text-white/40 font-mono">
+                <span className="text-amber-200/50 uppercase tracking-wider">Ecosystem:</span>
+                <a href="https://webdevworker.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition-colors">WebDevWorker</a>
+                <span>•</span>
+                <a href="https://calcworker.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition-colors">CalcWorker</a>
+              </div>
             </div>
           </div>
         </div>

@@ -147,6 +147,45 @@ export default function AboutPage() {
               </a>.
             </p>
           </section>
+          {/* Section 7: Zaviyan Digital Ecosystem & Sister Platforms */}
+          <section className="space-y-4 pt-6 border-t border-white/10">
+            <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight">
+              7. The Zaviyan Digital Ecosystem & Sister Platforms
+            </h2>
+            <p className="text-sm text-white/70 leading-relaxed font-serif">
+              Solas Haven is part of a purposeful technology and human-centered utility ecosystem engineered under <strong>Zaviyan</strong>. Explore our sister digital workstations:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <a
+                href="https://webdevworker.com"
+                target="_blank"
+                rel="noopener"
+                className="p-5 rounded-2xl border border-white/10 bg-white/[0.02] hover:border-amber-300/40 hover:bg-white/[0.05] transition-all group block"
+              >
+                <div className="flex items-center justify-between text-amber-200 font-semibold text-sm">
+                  <span>⚡ WebDevWorker</span>
+                  <span className="text-xs text-white/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                </div>
+                <p className="text-xs text-white/60 font-sans mt-2 leading-relaxed">
+                  100+ Free Client-Side Web Developer Utilities, CSS Generators, &amp; On-Demand AI Micro-App Builder.
+                </p>
+              </a>
+              <a
+                href="https://calcworker.com"
+                target="_blank"
+                rel="noopener"
+                className="p-5 rounded-2xl border border-white/10 bg-white/[0.02] hover:border-amber-300/40 hover:bg-white/[0.05] transition-all group block"
+              >
+                <div className="flex items-center justify-between text-amber-200 font-semibold text-sm">
+                  <span>🧮 CalcWorker</span>
+                  <span className="text-xs text-white/40 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
+                </div>
+                <p className="text-xs text-white/60 font-sans mt-2 leading-relaxed">
+                  High-Precision Computational Financial Workstation for IRS Taxes, LLC vs S-Corp, Real Estate &amp; Wealth.
+                </p>
+              </a>
+            </div>
+          </section>
         </div>
 
         {/* Footer Navigation */}

@@ -68,14 +68,10 @@ export default function CommunityStoryReaderModal({
       } catch {}
     }
 
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    }
+    const { copyToClipboard } = await import("@/utils/clipboard");
+    await copyToClipboard(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
   };
 
   return (

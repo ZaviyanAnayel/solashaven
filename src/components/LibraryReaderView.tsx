@@ -155,7 +155,8 @@ export default function LibraryReaderView({ book, relatedBooks }: LibraryReaderV
         });
       } catch {}
     } else {
-      navigator.clipboard.writeText(url);
+      const { copyToClipboard } = await import("@/utils/clipboard");
+      await copyToClipboard(url);
       setCopiedQuote(true);
       setTimeout(() => setCopiedQuote(false), 3000);
     }

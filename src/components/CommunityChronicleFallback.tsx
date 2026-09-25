@@ -53,11 +53,12 @@ export default function CommunityChronicleFallback({ slug }: { slug: string }) {
         return;
       } catch {}
     }
-    try {
-      await navigator.clipboard.writeText(url);
+    const { copyToClipboard } = await import("@/utils/clipboard");
+    const ok = await copyToClipboard(url);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
-    } catch {}
+    }
   };
 
   // Loading state
