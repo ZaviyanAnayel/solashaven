@@ -22,7 +22,8 @@ import {
   Moon,
   Menu,
   ChevronRight,
-  Bookmark
+  Bookmark,
+  Landmark
 } from "lucide-react";
 import { filterRegions, EarthRegion } from "../lib/countries";
 import { useSoulProfile, CELESTIAL_AVATARS } from "../lib/useSoulProfile";
@@ -188,6 +189,14 @@ export default function Header({
                 <span>Library</span>
               </Link>
 
+              <Link
+                href="/museum"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+              >
+                <Landmark className="w-3.5 h-3.5 text-amber-300" />
+                <span>The Almost Museum</span>
+              </Link>
+
               {onOpenVigil && (
                 <button
                   type="button"
@@ -258,6 +267,14 @@ export default function Header({
               >
                 <Bookmark className="w-3.5 h-3.5 text-amber-400" />
                 <span>Library</span>
+              </Link>
+
+              <Link
+                href="/museum"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+              >
+                <Landmark className="w-3.5 h-3.5 text-amber-300" />
+                <span>Museum</span>
               </Link>
             </nav>
           </div>
@@ -665,6 +682,23 @@ export default function Header({
                 <ChevronRight className="w-4 h-4 text-white/40" />
               </Link>
 
+              <Link
+                href="/museum"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.08] border border-white/5 text-white/90 text-sm font-medium transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center text-amber-300">
+                    <Landmark className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div>The Almost Museum</div>
+                    <div className="text-[10px] text-white/40">Adopt unfinished stories, art & songs</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-white/40" />
+              </Link>
+
               {onOpenVigil && (
                 <button
                   type="button"
@@ -812,9 +846,9 @@ export default function Header({
                 <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-amber-300 transition-colors">Contact</Link>
               </div>
 
-              {/* Zaviyan Ecosystem Sister Platforms */}
+              {/* Zaviyan Sister Platforms */}
               <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-center gap-3 text-[10px] text-white/40 font-mono">
-                <span className="text-amber-200/50 uppercase tracking-wider">Ecosystem:</span>
+                <span className="text-amber-200/60 uppercase tracking-wider">Zaviyan:</span>
                 <a href="https://webdevworker.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition-colors">WebDevWorker</a>
                 <span>•</span>
                 <a href="https://calcworker.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-300 transition-colors">CalcWorker</a>

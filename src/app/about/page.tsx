@@ -148,13 +148,13 @@ export default function AboutPage() {
             </p>
           </section>
 
-          {/* Section 7: Zaviyan Digital Ecosystem & Sister Platforms */}
+          {/* Section 7: Zaviyan Platforms */}
           <section className="space-y-4 pt-6 border-t border-white/10">
             <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight">
-              7. The Zaviyan Digital Ecosystem & Sister Platforms
+              7. Zaviyan Platforms
             </h2>
             <p className="text-sm text-white/70 leading-relaxed font-serif">
-              Solas Haven is part of a purposeful technology and human-centered utility ecosystem engineered under <strong>Zaviyan</strong>. Explore our sister digital workstations:
+              Solas Haven is engineered under <strong>Zaviyan</strong>. Explore our sister digital platforms:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <a
