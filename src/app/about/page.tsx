@@ -147,7 +147,6 @@ export default function AboutPage() {
               </a>.
             </p>
           </section>
-
           {/* Section 7: Zaviyan Platforms */}
           <section className="space-y-4 pt-6 border-t border-white/10">
             <h2 className="text-xl sm:text-2xl font-serif font-semibold text-white tracking-tight">

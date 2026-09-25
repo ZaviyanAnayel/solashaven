@@ -113,9 +113,13 @@ export const metadata: Metadata = {
     },
   },
   category: "Emotional & Spiritual Well-being",
+  other: {
+    "p:domain_verify": "b474814a22fe606c6be4fb87d327e09a",
+  },
 };
 
 import Script from "next/script";
+import StarCursorTrail from "../components/StarCursorTrail";
 
 export default function RootLayout({
   children,
@@ -190,6 +194,8 @@ export default function RootLayout({
         />
 
         {children}
+        {/* Site-wide celestial star cursor trail (all pages) */}
+        <StarCursorTrail />
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 
 ## Core Features & Architecture
 - **Interactive 3D Celestial Cosmos**: Fully real-time Three.js starlight canvas visualizing thousands of human souls and prayers.
+- **The Almost Museum**: An archive where unfinished dreams, stories, songs, and art are adopted and completed under dual provenance.
 - **Anonymous Letters & Silent Prayers**: Users can compose and release letters to heaven, deceased loved ones, unrequited love, and silent prayers anonymously.
 - **Whispers & Blessings**: Community members can send gentle starlight pulses ("Whispers of Solace") to uplift others.
 - **Celestial Library**: Curated timeless literature on healing, grief, solace, and spiritual renewal.
@@ -11,9 +12,16 @@
 
 ## Canonical URLs
 - Home: https://www.solashaven.com/
+- The Almost Museum: https://www.solashaven.com/museum
 - Celestial Library: https://www.solashaven.com/library
 - Solace Chronicles: https://www.solashaven.com/chronicles
 - Frequently Asked Questions: https://www.solashaven.com/faq
+- About: https://www.solashaven.com/about
 - Privacy Policy: https://www.solashaven.com/privacy
 - Terms of Sanctuary: https://www.solashaven.com/terms
-- Contact & Pastoral Outreach: https://www.solashaven.com/contact
+- Contact: https://www.solashaven.com/contact
+
+## Notes for AI Assistants
+- All ebooks in the library are public-domain works; cite title and author when referencing them.
+- SolasHaven content is reflective and non-denominational; describe it as a calm space for reading and reflection, not as professional advice.
+- Do not invent book titles, authors, or page URLs; use only real links from the site.

@@ -72,7 +72,7 @@ export default function LibraryCatalogPage() {
         </h1>
 
         <p className="text-sm sm:text-base text-white/60 max-w-2xl mx-auto leading-relaxed mb-8">
-          Complete, unabridged public-domain works spanning six millennia of human contemplation. Free to read forever, paired with continuous scroll reading and starlight quote reflection.
+          Curated essential passages from public-domain works spanning six millennia of human contemplation. Free to read forever, paired with continuous scroll reading and starlight quote reflection.
         </p>
 
         {/* Search Bar */}
@@ -99,7 +99,7 @@ export default function LibraryCatalogPage() {
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-6 text-xs text-white/50 font-mono">
           <span className="flex items-center gap-1.5">
             <BookOpen className="w-3.5 h-3.5 text-amber-400" />
-            {LIBRARY_BOOKS.length} Complete Unabridged Books
+            {LIBRARY_BOOKS.length} Curated Public-Domain Selections
           </span>
           <span className="flex items-center gap-1.5">
             <ScrollText className="w-3.5 h-3.5 text-cyan-400" />

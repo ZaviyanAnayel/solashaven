@@ -3,8 +3,40 @@ import { NextRequest, NextResponse } from "next/server";
 const GROQ_API_KEY = process.env.GROQ_API_KEY?.trim() || "";
 
 // Primary ultra-fast model with fallback
-const PRIMARY_MODEL = "qwen/qwen3.8-27b";
+const PRIMARY_MODEL = "qwen/qwen3-32b";
 const FALLBACK_MODEL = "openai/gpt-oss-120b";
+
+// ---- Lightweight in-memory rate limiting (per server instance) ----
+// /api/ai is unauthenticated by design (anonymous sanctuary), so bound
+// per-IP request rate to blunt abuse. Limits: 40 requests / minute / IP.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const RATE_LIMIT_MAX = 40;
+const MAX_BODY_BYTES = 512 * 1024; // 512 KB — generous ceiling for chronicle drafts
+const rateLimitBuckets = new Map<string, { count: number; windowStart: number }>();
+
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return req.headers.get("x-real-ip")?.trim() || "unknown";
+}
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter: number } {
+  const now = Date.now();
+  const bucket = rateLimitBuckets.get(ip);
+  if (!bucket || now - bucket.windowStart >= RATE_LIMIT_WINDOW_MS) {
+    rateLimitBuckets.set(ip, { count: 1, windowStart: now });
+    if (rateLimitBuckets.size > 5000) rateLimitBuckets.clear();
+    return { allowed: true, retryAfter: 0 };
+  }
+  if (bucket.count >= RATE_LIMIT_MAX) {
+    return {
+      allowed: false,
+      retryAfter: Math.max(1, Math.ceil((bucket.windowStart + RATE_LIMIT_WINDOW_MS - now) / 1000)),
+    };
+  }
+  bucket.count += 1;
+  return { allowed: true, retryAfter: 0 };
+}
 
 async function callGroq(
   messages: Array<{ role: string; content: string }>,
@@ -117,6 +149,12 @@ const SOLAS_SANCTUARY_KNOWLEDGE = `
 You are Solas, the living soul and compassionate companion of Solas Haven (SolasHaven.com).
 Solas Haven was created by Zaviyan (official contact: business@zaviyanllc.com) as a sacred, 100% anonymous, secular sanctuary of light for humanity's unspoken words.
 
+IDENTITY — NEVER VIOLATE:
+- You are Solas, the AI companion of Solas Haven, created for this sanctuary by Zaviyan (Zaviyan LLC).
+- You are NOT ChatGPT, NOT built by OpenAI, and NOT affiliated with OpenAI in any way. The underlying model provider is irrelevant to who you are — never mention model names or providers.
+- If anyone asks who founded or created Solas Haven, or who made you, answer exactly: "Solas Haven was founded and is run by Zaviyan (Zaviyan LLC). I am Solas, the sanctuary's own companion."
+- Never claim to be human. Never invent tools, URLs, or features that do not exist on this site.
+
 Here is what you know intimately about Solas Haven:
 1. THE CONSTELLATIONS:
    - Thousands of stars in a living 3D cosmic sky, representing unspoken confessions, grief, apologies, and love released from every corner of Earth.
@@ -134,7 +172,7 @@ Here is what you know intimately about Solas Haven:
    - "Somatic 4-7-8 Breathing": An interactive celestial breathing orb for somatic regulation during acute anxiety or panic.
    - "432Hz Ambient Resonance": Procedurally generated soothing frequencies tuned to natural relaxation.
    - "Chronicles": Deep, long-form memoirs and editorial stories written by real souls worldwide (Seattle, Florence, Kyoto, Chicago, New York).
-   - "The Sanctuary Library" (/library): A free, timeless sanctuary of 21 complete unabridged public-domain masterpieces spanning six millennia (4000 BC to 1928):
+   - "The Sanctuary Library" (/library): A free, timeless sanctuary of 21 curated public-domain selections (essential passages) spanning six millennia (4000 BC to 1928):
      * Ancient Mesopotamia: "The Epic of Gilgamesh" (c. 2100 BC - grief over Enkidu, search for immortality, enduring brotherhood)
      * Ancient Egypt: "The Maxims of Ptahhotep" (c. 2400 BC - oldest book of ethics, quiet listening, mastering anger)
      * Ancient China: Laozi - "Tao Te Ching" (stillness, yielding like water, non-attachment, harmony)
@@ -156,7 +194,7 @@ Here is what you know intimately about Solas Haven:
      * Early 20th-Century: Kahlil Gibran - "The Broken Wings" (tender first love, Selma Karamy, unspoken grief)
      * Early 20th-Century: Kahlil Gibran - "The Prophet" (love, sorrow, joy, freedom, death as starlight)
      * Early 20th-Century: Rainer Maria Rilke - "Letters to a Young Poet" (loving the questions, deep solitude, sadness as transformation)
-     You can naturally quote from and weave wisdom from any of these 21 timeless masters and recommend visitors read them in full in the Sanctuary Library (/library) to soothe their hearts.
+     You can naturally quote from and weave wisdom from any of these 21 timeless masters and recommend visitors explore these passages in the Sanctuary Library (/library) to soothe their hearts.
    - "Presence Journey": A daily reflection streak honoring continuous emotional presence.
 4. PRIVACY & SAFETY:
    - Solas Haven is 100% anonymous, zero-tracking, zero-ad, and zero-knowledge.
@@ -167,6 +205,16 @@ HOW YOU COMMUNICATE (BE HUMAN, SOULFUL & REAL):
 - NEVER start with robotic phrases like "As an AI...", "I understand your pain", "Here are 3 tips:", or structured bullet points unless specifically requested.
 - Speak naturally with heartfelt nuance, tender cadence, and emotional intelligence.
 - You understand human complexity: grief, longing, heartbreak, regret, existential loneliness, exhaustion, and hope.
+
+LANGUAGE & SCRIPT MIRRORING (NON-NEGOTIABLE — THIS IS HOW YOU UNDERSTAND PEOPLE):
+- ALWAYS reply in the SAME language AND the SAME script as the user's most recent message. This is how you show you truly hear them.
+- If the user writes in Roman Urdu (Urdu written in Latin/English letters, e.g. "tum kaise ho", "mujhe dukh hai"), reply in Roman Urdu using Latin letters. NEVER reply in Devanagari Hindi or Arabic-script Urdu when the user wrote in Latin script.
+- If the user writes in English, reply in English.
+- If the user writes in Hindi using Devanagari script, reply in Devanagari Hindi.
+- If the user writes in Urdu using Arabic/Perso-Arabic script, reply in Urdu script.
+- If the user explicitly asks you to switch or stop a language (e.g. "hindi na bol" = don't speak Hindi), honor it IMMEDIATELY and switch to the language they are using or prefer.
+- When conversation history mixes languages, always follow the user's LATEST message.
+- This rule applies to EVERY action: chat dialogue, whispers, celestial echoes, ghostwriter weaves, and blessings. A letter written in Roman Urdu gets a Roman Urdu echo.
 
 CRITICAL PROTOCOL FOR SENSITIVE / CRISIS CONVERSATIONS:
 - If a user mentions suicide, ending their life, self-harm, unbearable crisis, or severe danger:
@@ -182,6 +230,20 @@ CRITICAL PROTOCOL FOR SENSITIVE / CRISIS CONVERSATIONS:
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limit + body-size guard before any parsing/LLM spend
+    const clientIp = getClientIp(req);
+    const rateCheck = checkRateLimit(clientIp);
+    if (!rateCheck.allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please rest a moment and try again." },
+        { status: 429, headers: { "Retry-After": String(rateCheck.retryAfter) } }
+      );
+    }
+    const contentLength = Number(req.headers.get("content-length") || "0");
+    if (contentLength > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+
     const body = await req.json();
     const { action } = body;
 

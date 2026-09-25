@@ -1,0 +1,43 @@
+name: Solas Haven Daily SEO Agent
+
+# Autonomous daily chronicle generation — high-intent emotional,
+# philosophical & grief topics with schema, internal links and
+# IndexNow pings. Runs every day at 06:00 UTC.
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Prevent overlapping runs (e.g. a manual dispatch colliding with the
+# scheduled run) from appending duplicate chronicles or failing the push.
+concurrency:
+  group: solas-seo-agent
+  cancel-in-progress: true
+
+jobs:
+  generate-chronicle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run SEO agent
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node scripts/seo-agent.mjs
+
+      - name: Commit new chronicle
+        run: |
+          git config user.name "Solas SEO Agent"
+          git config user.email "seo-agent@solashaven.com"
+          git add src/lib/chronicles/seoGeneratedStories.ts
+          git diff --cached --quiet || git commit -m "✦ Daily SEO chronicle — $(date -u +%F)"
+          git push
