@@ -198,10 +198,10 @@ export default function Header({
                   else window.location.href = "/candle";
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
-                title="Turn Candle — Light an Eternal Flame in the Sacred Quietude"
+                title="Light a Candle — Kindle Solace in the Sacred Stillness"
               >
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
-                <span>Turn Candle</span>
+                <span>Light a Candle</span>
               </button>
 
               <Link
@@ -291,10 +291,10 @@ export default function Header({
                   else window.location.href = "/candle";
                 }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
-                title="Turn Candle — Light an Eternal Flame in the Sacred Quietude"
+                title="Light a Candle — Kindle Solace in the Sacred Stillness"
               >
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
-                <span>Turn Candle</span>
+                <span>Light a Candle</span>
               </button>
 
               <Link
@@ -725,10 +725,10 @@ export default function Header({
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span>Turn Candle (Sanctuary)</span>
+                      <span>Light a Candle (Sanctuary)</span>
                       <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-400/20 text-amber-300">New</span>
                     </div>
-                    <div className="text-[10px] text-amber-200/60">Light an eternal flame in the stillness</div>
+                    <div className="text-[10px] text-amber-200/60">Kindle peace & silent prayers in stillness</div>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-amber-400/60" />

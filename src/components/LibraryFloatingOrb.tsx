@@ -79,7 +79,7 @@ export default function LibraryFloatingOrb({ onOpenCandles }: LibraryFloatingOrb
           }
         }}
         className="relative flex items-center gap-2.5 p-1 sm:p-1.5 sm:pr-4 rounded-full bg-gradient-to-r from-neutral-950/90 via-amber-950/50 to-neutral-950/90 border border-amber-400/40 hover:border-amber-300/80 shadow-2xl shadow-amber-500/25 hover:shadow-amber-400/50 backdrop-blur-2xl transition-all duration-500 hover:scale-[1.03] active:scale-[0.98] cursor-pointer group/candle"
-        title="Turn Candle — Light an Eternal Flame in the Sacred Quietude"
+        title="Light a Candle — Kindle Solace in the Sacred Stillness"
       >
         {/* Breathing Starlight Ambient Glow Behind Candle Orb */}
         <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-500/30 via-orange-500/20 to-yellow-400/25 blur-lg opacity-70 group-hover/candle:opacity-100 animate-pulse transition-opacity pointer-events-none" />
@@ -100,13 +100,13 @@ export default function LibraryFloatingOrb({ onOpenCandles }: LibraryFloatingOrb
         <div className="hidden sm:flex flex-col text-left py-0.5">
           <div className="flex items-center gap-1.5">
             <span className="text-xs font-serif font-semibold text-amber-100 group-hover/candle:text-white transition-colors tracking-wide">
-              Turn Candle
+              Light a Candle
             </span>
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
           </div>
           <span className="text-[10px] font-mono text-amber-300/80 tracking-tight flex items-center gap-1">
             <Sparkles className="w-2.5 h-2.5 text-amber-400" />
-            <span>Eternal Quiet Sanctuary</span>
+            <span>Kindle Peace & Stillness</span>
           </span>
         </div>
       </button>
