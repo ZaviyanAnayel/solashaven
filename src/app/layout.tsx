@@ -161,20 +161,23 @@ export default function RootLayout({
       <head>
         <meta name="google-site-verification" content="google042113ed54845edd" />
         <script
+          id="schema-website"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <script
+          id="schema-org"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
         />
-        <script
-          async
+        <Script
+          id="google-adsense"
+          strategy="afterInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405098265613384"
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans selection:bg-amber-400/30 selection:text-amber-100 bg-black text-white">
+      <body suppressHydrationWarning className="min-h-full flex flex-col font-sans selection:bg-amber-400/30 selection:text-amber-100 bg-black text-white">
         {/* Google Analytics 4 */}
         <Script
           strategy="afterInteractive"

@@ -16,6 +16,7 @@ import UserProfileModal from "../components/UserProfileModal";
 import WhisperingWellModal from "../components/WhisperingWellModal";
 import AiFloatingOrb from "../components/AiFloatingOrb";
 import LibraryFloatingOrb from "../components/LibraryFloatingOrb";
+import CandleSanctuaryModal from "../components/CandleSanctuaryModal";
 import SanctuaryIntro from "../components/SanctuaryIntro";
 import CreatorIntelPulse from "../components/CreatorIntelPulse";
 import { useSoulProfile } from "../lib/useSoulProfile";
@@ -52,6 +53,7 @@ export default function HomePage() {
   const [breathScale, setBreathScale] = useState(1.0);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isWellOpen, setIsWellOpen] = useState(false);
+  const [isCandleSanctuaryOpen, setIsCandleSanctuaryOpen] = useState(false);
   const [prefilledReleaseText, setPrefilledReleaseText] = useState("");
 
   const {
@@ -222,6 +224,7 @@ export default function HomePage() {
         onOpenBreath={() => setIsBreathOpen(true)}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenWell={() => setIsWellOpen(true)}
+        onOpenCandles={() => setIsCandleSanctuaryOpen(true)}
       />
 
       {/* Poetic homepage intro — visible h1 + sanctuary pathways (SEO) */}
@@ -237,8 +240,8 @@ export default function HomePage() {
       {/* Floating Starlight AI Companion Orb (Floating Bottom-Right with Circular Star Motion) */}
       <AiFloatingOrb onOpenAi={() => setIsWellOpen(true)} />
 
-      {/* Floating Sanctuary Library Orb (Floating Bottom-Left with Rotating Celestial Nebula) */}
-      <LibraryFloatingOrb />
+      {/* Floating Sanctuary Library & Turn Candle Orb (Floating Bottom-Left) */}
+      <LibraryFloatingOrb onOpenCandles={() => setIsCandleSanctuaryOpen(true)} />
 
       {/* Living 3D/Canvas Constellation with Earth Search, Depth Drift, Breath Scaling & Shooting Stars */}
       <ConstellationCanvas
@@ -339,6 +342,12 @@ export default function HomePage() {
           setPrefilledReleaseText(text);
           setIsReleaseModalOpen(true);
         }}
+      />
+
+      {/* The Eternal Candle Sanctuary (Dark Environment with Click-to-Light & Persistent Flames) */}
+      <CandleSanctuaryModal
+        isOpen={isCandleSanctuaryOpen}
+        onClose={() => setIsCandleSanctuaryOpen(false)}
       />
 
       {/* Creator Intelligence Hub (Sanctuary Sentinel) */}

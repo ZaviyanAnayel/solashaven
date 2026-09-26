@@ -46,6 +46,7 @@ interface HeaderProps {
   onOpenBreath?: () => void;
   onOpenProfile?: () => void;
   onOpenWell?: () => void;
+  onOpenCandles?: () => void;
 }
 
 export default function Header({
@@ -65,6 +66,7 @@ export default function Header({
   onOpenBreath,
   onOpenProfile,
   onOpenWell,
+  onOpenCandles,
 }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -189,6 +191,19 @@ export default function Header({
                 <span>Library</span>
               </Link>
 
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenCandles) onOpenCandles();
+                  else window.location.href = "/candle";
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
+                title="Turn Candle — Light an Eternal Flame in the Sacred Quietude"
+              >
+                <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
+                <span>Turn Candle</span>
+              </button>
+
               <Link
                 href="/museum"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
@@ -268,6 +283,19 @@ export default function Header({
                 <Bookmark className="w-3.5 h-3.5 text-amber-400" />
                 <span>Library</span>
               </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenCandles) onOpenCandles();
+                  else window.location.href = "/candle";
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
+                title="Turn Candle — Light an Eternal Flame in the Sacred Quietude"
+              >
+                <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
+                <span>Turn Candle</span>
+              </button>
 
               <Link
                 href="/museum"
@@ -681,6 +709,30 @@ export default function Header({
                 </div>
                 <ChevronRight className="w-4 h-4 text-white/40" />
               </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  if (onOpenCandles) onOpenCandles();
+                  else window.location.href = "/candle";
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-amber-500/[0.06] hover:bg-amber-500/[0.12] border border-amber-400/20 text-amber-100 text-sm font-medium transition-all text-left cursor-pointer"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center text-amber-400">
+                    <Flame className="w-4 h-4 fill-amber-400/30 animate-pulse" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span>Turn Candle (Sanctuary)</span>
+                      <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-400/20 text-amber-300">New</span>
+                    </div>
+                    <div className="text-[10px] text-amber-200/60">Light an eternal flame in the stillness</div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-amber-400/60" />
+              </button>
 
               <Link
                 href="/museum"
