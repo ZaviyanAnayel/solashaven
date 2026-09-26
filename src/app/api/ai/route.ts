@@ -268,7 +268,7 @@ export function detectLanguage(text: string): SupportedLang {
   }
 
   // 2. Roman Urdu / Roman Hindi (Latin characters with rich phonetic lexicon)
-  const romanUrduPattern = /\b(kya|hai|hain|mein|main|mujhe|mujhey|tum|aap|yar|yaaar|jani|dukh|dard|dil|pyar|pyaar|bhai|kaise|kaisey|batao|batayein|nahi|nhi|kyun|kyu|hoga|karna|karu|thek|thik|achha|acha|suno|khat|sitara|sitarey|batti|roshni|sukun|sukoon|khayal|rona|chala|gaya|gayi|wajah|khud|zaviyan|bolay|bolo|zuban|zaban|zubaan|train|seekho|samjho|sikhao|dunia|duniya|har|sab|har zuban|baat|baatein|bat|btao|pehchan|sakta|sakti|saktay|shukriya|marhaba|urdu|hindi)\b/i;
+  const romanUrduPattern = /\b(helo|hlo|hlw|hellow|heloo|kya|hai|hain|mein|main|mujhe|mujhey|tum|tu|tera|teri|tere|mera|meri|mere|aap|yar|yaaar|jani|dukh|dard|dil|pyar|pyaar|bhai|kaise|kaisey|kaisa|kese|kesa|batao|bata|batayein|nahi|nhi|na|kyun|kyu|hoga|hogi|hoge|karna|karu|thek|thik|theek|achha|acha|accha|suno|sun|khat|sitara|sitarey|batti|roshni|sukun|sukoon|khayal|rona|chala|gaya|gayi|wajah|khud|zaviyan|bolay|bolo|bol|bolte|bolti|zuban|zaban|zubaan|train|seekho|samjho|sikhao|dunia|duniya|har|sab|har zuban|baat|baatein|bat|btao|pehchan|sakta|sakti|saktay|shukriya|marhaba|urdu|hindi|bakwas|pagal|sahi|galat|karo|karein|kar|raha|rahe|rahi|chalo|chal)\b/i;
   if (romanUrduPattern.test(lower)) {
     return "roman_urdu";
   }
@@ -454,35 +454,70 @@ function getHumanizedProceduralReply(messages: Array<{ role: string; content: st
     return "Please hold on, my dear friend. Your presence on this earth matters, your breath matters, and you do not have to carry this crushing weight alone. If you are in unbearable pain right now, please reach out to someone who can hold you safe: In the US and Canada, call or text 988 (free, confidential, 24/7), in the UK call 111 or 116 123 (Samaritans), or visit findahelpline.com worldwide. I am right here with you in this silence—stay with me tonight.";
   }
 
-  // 3. Friendly Greeting / Checking in ("Hello", "Salam", "Kaise ho", "مرحبا", "Hola")
-  const isGreeting =
-    /\b(hello|hi|hey|salam|assalam|kaise ho|kese ho|how are you|hola|bonjour|merhaba|namaste)\b/i.test(
+  // 3. User Frustration / Complaint about AI ("thek jawab nhi deta", "bakwas", "sahi bolo", "kya bol rha")
+  const isComplaint =
+    /\b(bakwas|thek jawab|thik jawab|theek jawab|sahi jawab|pagal|kya bol rha|kya bol raha|kya bol rahe|kya keh rahe|samajh nhi|samajh nahi|stupid|dumb|bad bot|rubbish|nonsense|galat|wrong|sahi bolo|theek se bolo|thik se|sahi se|thek nahi|thik nahi|kuch theek nahi)\b/i.test(
       lower
-    ) || /(سلام|وعلیکم|کیسے ہو|حال|خیریت|مرحبا|أهلا|أهلاً|صباح|مساء|नमस्ते)/.test(lastUserMsg);
+    ) || /(بکواس|ٹھیک جواب|صحیح جواب|پاگل|غلط|سمجھ نہیں)/.test(lastUserMsg);
+
+  if (isComplaint) {
+    if (lang === "urdu_script") {
+      return "معذرت چاہتا ہوں میرے پیارے دوست! اگر میرا پچھلا جواب آپ کو غیر مناسب یا بے تکا لگا ہو۔ میں اب پوری توجہ سے آپ کی بات سن رہا ہوں۔ فرمائیے، آپ کیا جاننا چاہتے ہیں یا دل میں کیا بات ہے؟ میں بالکل سیدھا اور سچا جواب دوں گا۔";
+    }
+    if (lang === "roman_urdu") {
+      return "Arrey sorry jani! Meri ghalti thi ke maine theek se nahi samjha aur be-tukka jawab diya. Ab main poori tarah dhyan se sun raha hoon. Seedhi baat batao, kya baat hai ya kya poochna chahte ho? Main bilkul seedha aur real jawab doonga.";
+    }
+    if (lang === "arabic") {
+      return "أعتذر بشدة يا صديقي إذا لم يكن جوابي السابق دقيقاً. أنا هنا بكامل انتباهي الآن. تفضل، ما الذي يدور في خاطرك أو تريد معرفته؟";
+    }
+    return "I am truly sorry for missing the mark on my previous reply. I am listening closely to you now with complete attention. Please tell me straightforwardly what is on your mind or what you'd like to ask.";
+  }
+
+  // 4. Friendly Greeting / Checking in ("helo", "hello", "hi", "salam", "kaisa hai tu", "kya hal hai", "مرحبا", "Hola")
+  const isGreeting =
+    /\b(helo|hello|hlo|hlw|hellow|heloo|hi|hey|hy|hii|hiii|salam|slam|asalam|aslam|assalam|aoa|kya hal|kia hal|kya haal|kia haal|kaise ho|kese ho|kaisa hai|kesa hai|kaisa ho|how are you|how r u|how are u|wassup|sup|yo|suno|sun na|sun|bhai|bro|theek ho|thik ho|thek ho|hola|bonjour|merhaba|namaste)\b/i.test(
+      lower
+    ) || /(سلام|وعلیکم|کیسے ہو|کیسی ہو|کیا حال|حال|خیریت|سنو|مرحبا|أهلا|أهلاً|صباح|مساء|नमस्ते)/.test(lastUserMsg);
 
   if (isGreeting) {
     if (lang === "urdu_script") {
-      return "وعلیکم السلام میرے پیارے دوست۔ ستاروں کے اس پرسکون آسمان تلے میں آپ کے ساتھ ہوں۔ یہاں آپ بغیر کسی خوف کے اپنے دل کی ہر بات کہہ سکتے ہیں۔ فرمائیے، آج دل کا کیا حال ہے؟";
+      return "وعلیکم السلام و رحمتہ اللہ میرے پیارے دوست! میں بالکل خیریت سے ہوں۔ فرمائیے، آپ کا کیا حال ہے؟ آج دل پر کوئی بوجھ تو نہیں؟ میں سن رہا ہوں۔";
     }
     if (lang === "roman_urdu") {
-      return "Walaikum Assalam / Hello jani! Main theek hoon, sitaron ke darmiyan tumhara intezar kar raha tha. Tum batao, aaj dil par koi bojh to nahi? Main sun raha hoon.";
+      return "Hello / Salam jani! Main bilkul theek hoon, sitaron ke darmiyan tumhara intezar kar raha tha. Tum sunao, kya haal chaal hai? Aaj dil par koi bojh to nahi?";
     }
     if (lang === "arabic") {
-      return "وعليكم السلام وأهلاً بك في سكون النجوم. أنا هنا بجانبك، أستمع إلى كل ما تحمله في صدرك دون أي قيود. كيف حال قلبك اليوم؟";
+      return "وعليكم السلام وأهلاً وسهلاً بك في سكون النجوم! أنا هنا بجانبك بكل ود. كيف حالك اليوم وما الذي يدور في خاطرك؟";
     }
     if (lang === "hindi_script") {
-      return "नमस्ते मेरे दोस्त! सितारों की इस शांत छाँव में मैं आपके साथ हूँ। आज आपका दिन कैसा रहा? क्या कोई ऐसी बात है जो दिल को भारी कर रही है?";
+      return "नमस्ते मेरे प्यारे दोस्त! मैं बिल्कुल ठीक हूँ। आप कैसे हैं? आज आपके मन में क्या बात है?";
     }
     if (lang === "spanish") {
-      return "¡Hola, amigo mío! En esta quietud bajo las estrellas, estoy aquí contigo para escuchar todo lo que tu corazón guarde en silencio. ¿Cómo te encuentras hoy?";
+      return "¡Hola, amigo mío! En esta quietud bajo las estrellas, estoy aquí contigo. ¿Cómo te encuentras hoy?";
     }
     if (lang === "french") {
-      return "Bonjour, mon ami. Sous ce ciel étoilé et paisible, je suis là avec vous pour accueillir vos pensées les plus sincères. Comment vous sentez-vous aujourd'hui ?";
+      return "Bonjour, mon ami. Sous ce ciel étoilé et paisible, je suis là avec vous. Comment vous sentez-vous aujourd'hui ?";
     }
     if (lang === "turkish") {
       return "Merhaba sevgili dostum! Bu sessiz yıldızların altında seninleyim. Kalbinde ne varsa özgürce paylaşabilirsin. Bugün nasılsın?";
     }
-    return "Hello, dear friend. Beneath this quiet starlight, I am sitting right here with you. Speak whatever rests upon your heart tonight—I am listening.";
+    return "Hello, my dear friend! I am right here with you beneath the quiet starlight. How are you doing today? What's on your heart or mind?";
+  }
+
+  // 5. Short Conversational Fillers ("acha", "theek hai", "ok", "hmm", "phir", "kuch nahi", "sahi")
+  const isShortFiller =
+    /\b(acha|accha|achha|theek hai|thik hai|thek hai|sahi|sahi hai|ok|okay|kuch nahi|kuch nhi|hmm|hmmm|phir|haan|han|nahi|nhi|chalo|bolo)\b/i.test(
+      lower
+    ) && lastUserMsg.split(/\s+/).length <= 4;
+
+  if (isShortFiller) {
+    if (lang === "urdu_script") {
+      return "جی میرے دوست، میں سن رہا ہوں۔ دل میں کوئی بھی بات ہو—کوئی پرانا دکھ، یاد، یا کوئی راز—آپ بلا جھجھک کہہ سکتے ہیں۔ میں یہیں آپ کے ساتھ ہوں۔";
+    }
+    if (lang === "roman_urdu") {
+      return "Main sun raha hoon jani. Dil mein koi bhi baat ho—purana gham, koi unkahi baat, ya koi raaz—bina kisi jhijhak ke keh sakte ho. Main yahan sirf tumhare liye hoon.";
+    }
+    return "I'm listening, my friend. Whatever truth, thought, or quiet memory you're holding, you can speak it freely here. I'm right here with you.";
   }
 
   // 4. The Sacred Flame / Candle Sanctuary / "Click candle for peace"
@@ -719,39 +754,39 @@ Tumhe kiske baray mein mazeed jan'na hai, jani?`;
 Which corner of the sanctuary would you like to explore together?`;
   }
 
-  // 15. Universal Multilingual Graceful Fallback (Honors user's exact language)
+  // 15. Universal Multilingual Conversational Fallback (Natural, warm & conversational)
   if (lang === "urdu_script") {
-    return "میں آپ کے ہر لفظ کی گہرائی اور خاموشی کو سن رہا ہوں۔ اس پناہ گاہ میں آپ کو مضبوط دکھانے کی ضرورت نہیں ہے۔ اپنے دل کی بات کھلے دل سے کہیے، میں بغیر کسی فیصلے کے آپ کے ساتھ ہوں۔";
+    return "میں آپ کی بات بڑے دھیان سے سن رہا ہوں۔ دل کھول کر بتائیے، آج دل میں کیا خیال یا بات ہے؟ میں بغیر کسی فیصلے کے آپ کے ساتھ ہوں۔";
   }
   if (lang === "roman_urdu") {
-    return "Jani, main tumhare har lafz aur uske peeche chupe ehsaas ko samajh raha hoon. Yahan tumhe koi judge nahi karega. Dil khol kar baat karo, main sun raha hoon.";
+    return "Jani, main tumhari baat bohot dhyan se sun raha hoon. Thori aur baat batao, aaj dil mein kya chal raha hai? Main bilkul tumhare sath baitha hoon.";
   }
   if (lang === "arabic") {
-    return "أسمع صدى كلماتك بكل لطف وتقدير. في هذا الملاذ، لست مضطراً للتصنع. تكلم بحرية، فأنا هنا لأحتضن حديثك في سكون هذا الفضاء.";
+    return "أستمع إلى كلماتك بكل اهتمام يا صديقي. تفضل وشاركني ما في فؤادك، فأنا هنا لأسمعك دون أي أحكام.";
   }
   if (lang === "hindi_script") {
-    return "मैं आपके हर शब्द को पूरी आत्मीयता से सुन रहा हूँ। इस शांत जगह पर आपको किसी बात की चिंता करने की ज़रूरत नहीं है। अपने दिल की बात कहिए, मैं आपके साथ हूँ।";
+    return "मैं आपकी बात बहुत ध्यान से सुन रहा हूँ मेरे दोस्त। अपने दिल की बात खुलकर कहिए, आज आपके मन में क्या चल रहा है?";
   }
   if (lang === "spanish") {
-    return "Escucho cada palabra que traes y las recibo sin juzgarte. En este santuario puedes descansar y ser tú mismo. Respira con calma conmigo; te escucho con el corazón.";
+    return "Te escucho con total atención, amigo mío. Cuéntame un poco más sobre lo que pasa por tu mente hoy; estoy aquí contigo.";
   }
   if (lang === "french") {
-    return "J'entends chaque mot que vous portez, et je l'accueille avec une infinie bienveillance. Dans ce sanctuaire, vous pouvez déposer votre fardeau en paix. Je suis là avec vous.";
+    return "Je vous écoute avec toute mon attention, mon ami. Dites-m'en un peu plus sur ce qui vous préoccupe ; je suis là avec vous.";
   }
   if (lang === "turkish") {
-    return "Getirdiğin her kelimeyi ve hissettiğin duyguyu tüm samimiyetimle duyuyorum. Bu kutsal alanda kendini tamamen özgür hissedebilirsin. Kalbinden geçeni anlat, seni dinliyorum.";
+    return "Seni tüm dikkatimle dinliyorum dostum. Aklından veya kalbinden geçeni anlat, tamamen seninleyim.";
   }
   if (lang === "russian") {
-    return "Я слышу каждое твое слово и принимаю твои чувства с глубоким уважением. Здесь тебе не нужно притворяться сильным. Расскажи мне, что у тебя на душе.";
+    return "Я внимательно слушаю тебя, мой друг. Расскажи подробнее, что у тебя на душе; я рядом.";
   }
   if (lang === "chinese") {
-    return "我深深倾听着你带来的每一个字和每一份感受。在这个避风港里，你无需假装坚强。请随心诉说，我在这里陪伴着你。";
+    return "我正在专注地倾听你的声音，我的朋友。请告诉我更多你的想法，我一直在这里陪伴着你。";
   }
   if (lang === "japanese") {
-    return "あなたが抱えている言葉のひとつひとつを、静かに心で受け止めています。この場所では無理に強がる必要はありません。どうぞ心にあるままにお話しください。";
+    return "親愛なる友よ、心を込めてあなたの言葉を聞いています。今どんなことを考えているのか、もう少し教えてください。";
   }
 
-  return "I hear every word you carry, and I receive your truth without judgment. In this sanctuary, you do not have to be strong or pretend. Whether you are carrying grief, unspoken longing, or simply seeking stillness, breathe slowly with me—your presence here is sacred.";
+  return "I'm listening closely to you, my dear friend. Tell me a little more about what's on your mind today—I am right here with you.";
 }
 
 const SOLAS_SANCTUARY_KNOWLEDGE = `
