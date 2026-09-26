@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Letter, LetterCategory } from "../lib/types";
+import { Plus, Minus, RotateCcw } from "lucide-react";
 
 interface ConstellationCanvasProps {
   letters: Letter[];
@@ -24,6 +25,8 @@ interface BackgroundStar {
   alpha: number;
   speed: number;
   phase: number;
+  colorRgb: string;
+  hasDiffraction?: boolean;
 }
 
 interface ShootingStar {
@@ -55,6 +58,13 @@ export default function ConstellationCanvas({
   // Pan & Zoom state
   const cameraRef = useRef({ x: 0, y: 0, zoom: 1 });
   const targetCamRef = useRef<{ x: number; y: number; zoom: number } | null>(null);
+  const [zoomPercent, setZoomPercent] = useState<number>(100);
+  const zoomPercentRef = useRef<number>(100);
+  const breathScaleRef = useRef<number>(breathScale);
+
+  useEffect(() => {
+    breathScaleRef.current = breathScale;
+  }, [breathScale]);
   const isDraggingRef = useRef(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const touchStartPosRef = useRef<{ x: number; y: number } | null>(null);
@@ -66,18 +76,41 @@ export default function ConstellationCanvas({
   const animFrameRef = useRef<number | null>(null);
   const ascensionProgressRef = useRef<number>(0);
 
-  // Initialize 3D depth background stars
+  // Initialize 3D depth background stars with real stellar spectral classes
   useEffect(() => {
     const bg: BackgroundStar[] = [];
-    for (let i = 0; i < 750; i++) {
+    for (let i = 0; i < 1150; i++) {
+      const z = Math.random() * 3.4 + 0.35;
+      const size = Math.random() * 1.9 + 0.3;
+
+      // Realistic Stellar Spectral Classes (O, B, A, F, G, K, M)
+      const roll = Math.random();
+      let colorRgb = "245, 248, 255"; // Type A/F Pure Diamond White
+      if (roll < 0.28) {
+        colorRgb = "186, 230, 253"; // Type O/B Electric Ice Blue / Cyan
+      } else if (roll < 0.52) {
+        colorRgb = "255, 255, 255"; // Pure White
+      } else if (roll < 0.74) {
+        colorRgb = "254, 240, 138"; // Type G Warm Sun Yellow
+      } else if (roll < 0.90) {
+        colorRgb = "254, 215, 170"; // Type K Soft Amber Starlight
+      } else {
+        colorRgb = "254, 205, 211"; // Type M Pale Rose
+      }
+
+      // Bright foreground stars exhibit subtle 4-point cross diffraction spikes (Hubble/JWST aesthetic)
+      const hasDiffraction = z < 1.05 && size > 1.35 && Math.random() < 0.42;
+
       bg.push({
-        x: (Math.random() - 0.5) * 4500,
-        y: (Math.random() - 0.5) * 4500,
-        z: Math.random() * 3 + 0.4,
-        size: Math.random() * 1.8 + 0.3,
-        alpha: Math.random() * 0.75 + 0.2,
-        speed: Math.random() * 0.015 + 0.003,
-        phase: Math.random() * Math.PI * 2
+        x: (Math.random() - 0.5) * 5000,
+        y: (Math.random() - 0.5) * 5000,
+        z,
+        size,
+        alpha: Math.random() * 0.78 + 0.22,
+        speed: Math.random() * 0.014 + 0.003,
+        phase: Math.random() * Math.PI * 2,
+        colorRgb,
+        hasDiffraction
       });
     }
     bgStarsRef.current = bg;
@@ -211,13 +244,126 @@ export default function ConstellationCanvas({
     }
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
+  // Dashboard Zoom Controls & Actions
+  const handleZoomIn = useCallback(() => {
     targetCamRef.current = null;
-    const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
-    const newZoom = Math.min(Math.max(cameraRef.current.zoom * zoomFactor, 0.4), 3.0);
-    cameraRef.current.zoom = newZoom;
-  };
+    const cam = cameraRef.current;
+    const nextZoom = Math.min(cam.zoom * 1.25, 3.5);
+    targetCamRef.current = {
+      x: cam.x,
+      y: cam.y,
+      zoom: nextZoom,
+    };
+  }, []);
+
+  const handleZoomOut = useCallback(() => {
+    targetCamRef.current = null;
+    const cam = cameraRef.current;
+    const nextZoom = Math.max(cam.zoom * 0.8, 0.35);
+    targetCamRef.current = {
+      x: cam.x,
+      y: cam.y,
+      zoom: nextZoom,
+    };
+  }, []);
+
+  const handleResetZoom = useCallback(() => {
+    targetCamRef.current = null;
+    const cam = cameraRef.current;
+    targetCamRef.current = {
+      x: cam.x,
+      y: cam.y,
+      zoom: 1.0,
+    };
+  }, []);
+
+  const handleResetCamera = useCallback(() => {
+    targetCamRef.current = null;
+    targetCamRef.current = {
+      x: 0,
+      y: 0,
+      zoom: 1.0,
+    };
+  }, []);
+
+  // Native Non-Passive Wheel Event Listener: Ensures canvas scrolls & pinches smoothly without browser page zoom
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const onNativeWheel = (e: WheelEvent) => {
+      // Prevent browser document zooming and window scrolling
+      e.preventDefault();
+      e.stopPropagation();
+
+      targetCamRef.current = null;
+
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      // Handle trackpad pinch (ctrlKey) vs standard mouse wheel
+      const isPinch = e.ctrlKey;
+      const zoomFactor = isPinch
+        ? Math.exp(-e.deltaY * 0.015)
+        : e.deltaY < 0
+        ? 1.10
+        : 0.90;
+
+      const oldZoom = cameraRef.current.zoom;
+      const newZoom = Math.min(Math.max(oldZoom * zoomFactor, 0.35), 3.5);
+
+      const currentBreath = breathScaleRef.current || 1.0;
+      const worldMouseX =
+        (mouseX - canvas.width / 2) / (oldZoom * currentBreath) - cameraRef.current.x;
+      const worldMouseY =
+        (mouseY - canvas.height / 2) / (oldZoom * currentBreath) - cameraRef.current.y;
+
+      cameraRef.current.zoom = newZoom;
+      cameraRef.current.x =
+        (mouseX - canvas.width / 2) / (newZoom * currentBreath) - worldMouseX;
+      cameraRef.current.y =
+        (mouseY - canvas.height / 2) / (newZoom * currentBreath) - worldMouseY;
+
+      const pct = Math.round(newZoom * 100);
+      zoomPercentRef.current = pct;
+      setZoomPercent(pct);
+    };
+
+    canvas.addEventListener("wheel", onNativeWheel, { passive: false });
+    return () => {
+      canvas.removeEventListener("wheel", onNativeWheel);
+    };
+  }, []);
+
+  // Global Keyboard Controls for Dashboard Cosmos Zoom (+ / - / 0)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (e.key === "+" || e.key === "=") {
+        e.preventDefault();
+        handleZoomIn();
+      } else if (e.key === "-" || e.key === "_") {
+        e.preventDefault();
+        handleZoomOut();
+      } else if (e.key === "0") {
+        e.preventDefault();
+        handleResetCamera();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleZoomIn, handleZoomOut, handleResetCamera]);
 
   // Touch Handlers for Mobile Pan, Pinch-to-Zoom, and Tap
   const handleTouchStart = (e: React.TouchEvent<HTMLCanvasElement>) => {
@@ -323,16 +469,23 @@ export default function ConstellationCanvas({
       if (targetCamRef.current) {
         const cam = cameraRef.current;
         const target = targetCamRef.current;
-        cam.x += (target.x - cam.x) * 0.06;
-        cam.y += (target.y - cam.y) * 0.06;
-        cam.zoom += (target.zoom - cam.zoom) * 0.06;
+        cam.x += (target.x - cam.x) * 0.08;
+        cam.y += (target.y - cam.y) * 0.08;
+        cam.zoom += (target.zoom - cam.zoom) * 0.08;
 
         if (
           Math.hypot(target.x - cam.x, target.y - cam.y) < 1 &&
-          Math.abs(target.zoom - cam.zoom) < 0.01
+          Math.abs(target.zoom - cam.zoom) < 0.005
         ) {
           targetCamRef.current = null;
         }
+      }
+
+      // Sync zoom display badge if changed
+      const currentPct = Math.round(cameraRef.current.zoom * 100);
+      if (currentPct !== zoomPercentRef.current) {
+        zoomPercentRef.current = currentPct;
+        setZoomPercent(currentPct);
       }
 
       ctx.clearRect(0, 0, width, height);
@@ -341,31 +494,43 @@ export default function ConstellationCanvas({
       const grad = ctx.createRadialGradient(
         width / 2,
         height / 2,
-        100,
+        80,
         width / 2,
         height / 2,
         Math.max(width, height)
       );
-      grad.addColorStop(0, "#090a18");
-      grad.addColorStop(0.5, "#030409");
+      grad.addColorStop(0, "#070814");
+      grad.addColorStop(0.45, "#03040a");
       grad.addColorStop(1, "#010103");
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
-      // Subtle Cosmic Nebula Dust Clouds
-      const nebulaPulse = Math.sin(time * 0.4) * 0.03 + 0.05;
-      const nebGrad = ctx.createRadialGradient(
-        width * 0.35,
-        height * 0.4,
-        50,
-        width * 0.35,
-        height * 0.4,
-        450
-      );
-      nebGrad.addColorStop(0, `rgba(56, 189, 248, ${nebulaPulse})`);
-      nebGrad.addColorStop(0.6, `rgba(192, 132, 252, ${nebulaPulse * 0.5})`);
-      nebGrad.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = nebGrad;
+      // Multi-layered Interstellar Deep Space Cosmic Dust (Nebulae)
+      const nebPulse1 = Math.sin(time * 0.3) * 0.015 + 0.05;
+      const nebPulse2 = Math.cos(time * 0.22) * 0.012 + 0.04;
+
+      // Cyan / Sapphire Nebula Cluster (Upper Left)
+      const neb1 = ctx.createRadialGradient(width * 0.28, height * 0.32, 40, width * 0.28, height * 0.32, 520);
+      neb1.addColorStop(0, `rgba(14, 165, 233, ${nebPulse1 * 0.85})`);
+      neb1.addColorStop(0.5, `rgba(99, 102, 241, ${nebPulse1 * 0.45})`);
+      neb1.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = neb1;
+      ctx.fillRect(0, 0, width, height);
+
+      // Deep Amethyst / Violet Dust Lane (Lower Right)
+      const neb2 = ctx.createRadialGradient(width * 0.78, height * 0.72, 60, width * 0.78, height * 0.72, 580);
+      neb2.addColorStop(0, `rgba(168, 85, 247, ${nebPulse2 * 0.75})`);
+      neb2.addColorStop(0.5, `rgba(139, 92, 246, ${nebPulse2 * 0.35})`);
+      neb2.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = neb2;
+      ctx.fillRect(0, 0, width, height);
+
+      // Warm Amber / Golden Stardust Ribbon (Subtle Center Drift)
+      const neb3 = ctx.createRadialGradient(width * 0.52, height * 0.52, 30, width * 0.52, height * 0.52, 420);
+      neb3.addColorStop(0, "rgba(245, 158, 11, 0.022)");
+      neb3.addColorStop(0.7, "rgba(217, 119, 6, 0.008)");
+      neb3.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = neb3;
       ctx.fillRect(0, 0, width, height);
 
       // Global Silent Vigil Wave Effect
@@ -395,22 +560,266 @@ export default function ConstellationCanvas({
 
       const cam = cameraRef.current;
 
-      // 1. Draw 3D Depth-Drifting Background Stars
+      // =========================================================================
+      // DISTANT DEEP SPACE PLANETS (Realistic celestial bodies in the far distance)
+      // =========================================================================
+
+      // PLANET 1: Distant Ringed Ice Giant (Top-Right deep space)
+      {
+        const p1Parallax = 0.035;
+        const p1WorldX = 1480;
+        const p1WorldY = -940;
+        const p1x = (p1WorldX + cam.x * p1Parallax) * cam.zoom + width / 2;
+        const p1y = (p1WorldY + cam.y * p1Parallax) * cam.zoom + height / 2;
+        const p1Radius = Math.max(26, 68 * Math.pow(cam.zoom, 0.45));
+
+        if (p1x > -200 && p1x < width + 200 && p1y > -200 && p1y < height + 200) {
+          ctx.save();
+
+          // Atmospheric haze aura
+          const p1Aura = ctx.createRadialGradient(p1x, p1y, p1Radius * 0.65, p1x, p1y, p1Radius * 2.3);
+          p1Aura.addColorStop(0, "rgba(56, 189, 248, 0.11)");
+          p1Aura.addColorStop(0.5, "rgba(14, 116, 144, 0.04)");
+          p1Aura.addColorStop(1, "rgba(0, 0, 0, 0)");
+          ctx.fillStyle = p1Aura;
+          ctx.beginPath();
+          ctx.arc(p1x, p1y, p1Radius * 2.3, 0, Math.PI * 2);
+          ctx.fill();
+
+          // 1. Back Half of Rings (behind planet sphere)
+          ctx.save();
+          ctx.translate(p1x, p1y);
+          ctx.rotate(-0.36);
+          ctx.scale(1, 0.32);
+
+          ctx.beginPath();
+          ctx.arc(0, 0, p1Radius * 2.15, Math.PI, 0, false);
+          ctx.arc(0, 0, p1Radius * 1.35, 0, Math.PI, true);
+          ctx.closePath();
+          const ringBackGrad = ctx.createRadialGradient(0, 0, p1Radius * 1.35, 0, 0, p1Radius * 2.15);
+          ringBackGrad.addColorStop(0, "rgba(186, 230, 253, 0.03)");
+          ringBackGrad.addColorStop(0.5, "rgba(224, 242, 254, 0.20)");
+          ringBackGrad.addColorStop(0.85, "rgba(125, 211, 252, 0.10)");
+          ringBackGrad.addColorStop(1, "rgba(14, 116, 144, 0.01)");
+          ctx.fillStyle = ringBackGrad;
+          ctx.fill();
+          ctx.restore();
+
+          // 2. Planet Sphere Body
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p1x, p1y, p1Radius, 0, Math.PI * 2);
+          ctx.clip();
+
+          // Spherical gradient lit from top-left (starlight angle)
+          const p1SphereGrad = ctx.createRadialGradient(
+            p1x - p1Radius * 0.42,
+            p1y - p1Radius * 0.42,
+            p1Radius * 0.06,
+            p1x,
+            p1y,
+            p1Radius
+          );
+          p1SphereGrad.addColorStop(0, "#bae6fd"); // bright icy limb
+          p1SphereGrad.addColorStop(0.22, "#38bdf8"); // azure atmosphere
+          p1SphereGrad.addColorStop(0.58, "#0369a1"); // deep sapphire
+          p1SphereGrad.addColorStop(0.84, "#082f49"); // dark terminator transition
+          p1SphereGrad.addColorStop(1, "#020617"); // midnight void shadow
+          ctx.fillStyle = p1SphereGrad;
+          ctx.fillRect(p1x - p1Radius, p1y - p1Radius, p1Radius * 2, p1Radius * 2);
+
+          // Subtle cloud bands
+          ctx.fillStyle = "rgba(224, 242, 254, 0.06)";
+          ctx.fillRect(p1x - p1Radius, p1y - p1Radius * 0.3, p1Radius * 2, p1Radius * 0.14);
+          ctx.fillStyle = "rgba(14, 116, 144, 0.1)";
+          ctx.fillRect(p1x - p1Radius, p1y + p1Radius * 0.12, p1Radius * 2, p1Radius * 0.18);
+
+          // Nightside shadow covering lower-right
+          const p1Shadow = ctx.createRadialGradient(
+            p1x + p1Radius * 0.45,
+            p1y + p1Radius * 0.45,
+            p1Radius * 0.15,
+            p1x + p1Radius * 0.25,
+            p1y + p1Radius * 0.25,
+            p1Radius * 1.15
+          );
+          p1Shadow.addColorStop(0, "rgba(2, 6, 23, 0.96)");
+          p1Shadow.addColorStop(0.65, "rgba(2, 6, 23, 0.6)");
+          p1Shadow.addColorStop(1, "rgba(2, 6, 23, 0)");
+          ctx.fillStyle = p1Shadow;
+          ctx.fillRect(p1x - p1Radius, p1y - p1Radius, p1Radius * 2, p1Radius * 2);
+          ctx.restore();
+
+          // 3. Front Half of Rings (in front of planet sphere)
+          ctx.save();
+          ctx.translate(p1x, p1y);
+          ctx.rotate(-0.36);
+          ctx.scale(1, 0.32);
+
+          ctx.beginPath();
+          ctx.arc(0, 0, p1Radius * 2.15, 0, Math.PI, false);
+          ctx.arc(0, 0, p1Radius * 1.35, Math.PI, 0, true);
+          ctx.closePath();
+          const ringFrontGrad = ctx.createRadialGradient(0, 0, p1Radius * 1.35, 0, 0, p1Radius * 2.15);
+          ringFrontGrad.addColorStop(0, "rgba(186, 230, 253, 0.04)");
+          ringFrontGrad.addColorStop(0.45, "rgba(224, 242, 254, 0.25)");
+          ringFrontGrad.addColorStop(0.78, "rgba(147, 197, 253, 0.14)");
+          ringFrontGrad.addColorStop(1, "rgba(14, 116, 144, 0.02)");
+          ctx.fillStyle = ringFrontGrad;
+          ctx.fill();
+
+          // Planet shadow cast onto the ring
+          ctx.fillStyle = "rgba(2, 6, 23, 0.6)";
+          ctx.beginPath();
+          ctx.ellipse(p1Radius * 0.28, 0, p1Radius * 0.55, p1Radius * 0.88, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+
+          // 4. Subtle razor-thin Rayleigh limb arc along the sunlit edge
+          ctx.beginPath();
+          ctx.arc(p1x, p1y, p1Radius + 0.4, -Math.PI * 0.85, Math.PI * 0.12);
+          ctx.strokeStyle = "rgba(186, 230, 253, 0.32)";
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+
+          // 5. Distant tiny companion moon
+          const moonAngle = time * 0.07 + 1.2;
+          const mx = p1x + Math.cos(moonAngle) * p1Radius * 2.7;
+          const my = p1y + Math.sin(moonAngle) * p1Radius * 0.9;
+          ctx.fillStyle = "rgba(224, 242, 254, 0.85)";
+          ctx.beginPath();
+          ctx.arc(mx, my, 2.0, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+      }
+
+      // PLANET 2: Distant Warm Terracotta Moon (Bottom-Left deep space)
+      {
+        const p2Parallax = 0.030;
+        const p2WorldX = -1520;
+        const p2WorldY = 1080;
+        const p2x = (p2WorldX + cam.x * p2Parallax) * cam.zoom + width / 2;
+        const p2y = (p2WorldY + cam.y * p2Parallax) * cam.zoom + height / 2;
+        const p2Radius = Math.max(16, 44 * Math.pow(cam.zoom, 0.45));
+
+        if (p2x > -150 && p2x < width + 150 && p2y > -150 && p2y < height + 150) {
+          ctx.save();
+
+          // Warm ambient aura
+          const p2Aura = ctx.createRadialGradient(p2x, p2y, p2Radius * 0.55, p2x, p2y, p2Radius * 2.1);
+          p2Aura.addColorStop(0, "rgba(245, 158, 11, 0.09)");
+          p2Aura.addColorStop(0.6, "rgba(180, 83, 9, 0.03)");
+          p2Aura.addColorStop(1, "rgba(0, 0, 0, 0)");
+          ctx.fillStyle = p2Aura;
+          ctx.beginPath();
+          ctx.arc(p2x, p2y, p2Radius * 2.1, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Planet Body Sphere
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(p2x, p2y, p2Radius, 0, Math.PI * 2);
+          ctx.clip();
+
+          // Spherical gradient lit from top-right
+          const p2SphereGrad = ctx.createRadialGradient(
+            p2x + p2Radius * 0.42,
+            p2y - p2Radius * 0.42,
+            p2Radius * 0.06,
+            p2x,
+            p2y,
+            p2Radius
+          );
+          p2SphereGrad.addColorStop(0, "#fef08a"); // warm starlight rim
+          p2SphereGrad.addColorStop(0.24, "#f59e0b"); // amber crust
+          p2SphereGrad.addColorStop(0.62, "#92400e"); // deep terracotta
+          p2SphereGrad.addColorStop(0.86, "#451a03"); // shadow boundary
+          p2SphereGrad.addColorStop(1, "#020101"); // black nightside
+          ctx.fillStyle = p2SphereGrad;
+          ctx.fillRect(p2x - p2Radius, p2y - p2Radius, p2Radius * 2, p2Radius * 2);
+
+          // Subtle procedural maria/craters
+          ctx.fillStyle = "rgba(69, 26, 3, 0.35)";
+          ctx.beginPath();
+          ctx.arc(p2x - p2Radius * 0.1, p2y - p2Radius * 0.15, p2Radius * 0.28, 0, Math.PI * 2);
+          ctx.arc(p2x + p2Radius * 0.18, p2y + p2Radius * 0.22, p2Radius * 0.2, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Nightside shadow covering lower-left
+          const p2Shadow = ctx.createRadialGradient(
+            p2x - p2Radius * 0.42,
+            p2y + p2Radius * 0.42,
+            p2Radius * 0.1,
+            p2x - p2Radius * 0.2,
+            p2y + p2Radius * 0.2,
+            p2Radius * 1.05
+          );
+          p2Shadow.addColorStop(0, "rgba(2, 1, 1, 0.95)");
+          p2Shadow.addColorStop(0.58, "rgba(2, 1, 1, 0.55)");
+          p2Shadow.addColorStop(1, "rgba(2, 1, 1, 0)");
+          ctx.fillStyle = p2Shadow;
+          ctx.fillRect(p2x - p2Radius, p2y - p2Radius, p2Radius * 2, p2Radius * 2);
+          ctx.restore();
+
+          // Subtle sunlit rim arc
+          ctx.beginPath();
+          ctx.arc(p2x, p2y, p2Radius + 0.4, -Math.PI * 0.38, Math.PI * 0.48);
+          ctx.strokeStyle = "rgba(254, 240, 138, 0.30)";
+          ctx.lineWidth = 1.0;
+          ctx.stroke();
+
+          ctx.restore();
+        }
+      }
+
+      // =========================================================================
+      // 1. DRAW 3D DEPTH-DRIFTING BACKGROUND STARS (Real Space Colors & Diffraction)
+      // =========================================================================
       for (const s of bgStarsRef.current) {
         // Slow organic cosmic drift
-        s.y += s.speed * 0.04; s.x += Math.sin(time * 0.2 + s.phase) * 0.02;
-        if (s.y > 2250) s.y = -2250;
+        s.y += s.speed * 0.03;
+        s.x += Math.sin(time * 0.2 + s.phase) * 0.015;
+        if (s.y > 2500) s.y = -2500;
+        if (s.x > 2500) s.x = -2500;
+        if (s.x < -2500) s.x = 2500;
 
-        const parallaxFactor = 0.2 / s.z;
+        const parallaxFactor = 0.22 / s.z;
         const sx = (s.x + cam.x * parallaxFactor) * cam.zoom + width / 2;
         const sy = (s.y + cam.y * parallaxFactor) * cam.zoom + height / 2;
 
-        if (sx < -20 || sx > width + 20 || sy < -20 || sy > height + 20) continue;
+        if (sx < -25 || sx > width + 25 || sy < -25 || sy > height + 25) continue;
 
-        const twinkle = Math.sin(time * s.speed * 20 + s.phase) * 0.35 + 0.65;
-        const starSize = Math.max(0.4, (s.size / s.z) * cam.zoom);
+        // Multi-frequency organic scintillation
+        const twinkle =
+          Math.sin(time * s.speed * 26 + s.phase) * 0.28 +
+          Math.cos(time * s.speed * 13 + s.phase * 2) * 0.12 +
+          0.68;
+        const starSize = Math.max(0.35, (s.size / s.z) * Math.pow(cam.zoom, 0.65));
+        const alpha = Math.min(1, Math.max(0.08, (s.alpha / s.z) * twinkle));
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${(s.alpha / s.z) * twinkle})`;
+        // 4-point cross diffraction spikes on bright stars (James Webb / Hubble style)
+        if (s.hasDiffraction && cam.zoom > 0.6) {
+          const spikeLen = starSize * 4.6 * twinkle;
+          ctx.strokeStyle = `rgba(${s.colorRgb}, ${alpha * 0.35})`;
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(sx - spikeLen, sy);
+          ctx.lineTo(sx + spikeLen, sy);
+          ctx.moveTo(sx, sy - spikeLen);
+          ctx.lineTo(sx, sy + spikeLen);
+          ctx.stroke();
+
+          // Soft stellar halo glow
+          ctx.fillStyle = `rgba(${s.colorRgb}, ${alpha * 0.16})`;
+          ctx.beginPath();
+          ctx.arc(sx, sy, starSize * 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Star core
+        ctx.fillStyle = `rgba(${s.colorRgb}, ${alpha})`;
         ctx.beginPath();
         ctx.arc(sx, sy, starSize, 0, Math.PI * 2);
         ctx.fill();
@@ -708,7 +1117,6 @@ export default function ConstellationCanvas({
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onClick={handleClick}
-        onWheel={handleWheel}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -716,6 +1124,53 @@ export default function ConstellationCanvas({
         className="w-full h-full block touch-none"
         style={{ touchAction: "none" }}
       />
+
+      {/* On-Canvas Dashboard Cosmos Zoom Controls (+ / - / Reset / % indicator) */}
+      <aside
+        aria-label="Cosmos Dashboard Zoom Controls"
+        className="fixed right-3 sm:right-6 bottom-20 sm:bottom-24 z-30 pointer-events-auto flex flex-col items-center p-1 rounded-2xl bg-neutral-950/85 border border-amber-400/25 backdrop-blur-2xl shadow-2xl shadow-black/90 transition-all duration-300"
+      >
+        {/* Zoom In Button */}
+        <button
+          type="button"
+          onClick={handleZoomIn}
+          className="p-1.5 sm:p-2 rounded-xl text-white/75 hover:text-amber-200 hover:bg-amber-400/15 active:scale-90 transition-all cursor-pointer"
+          title="Zoom In Celestial Map (+)"
+        >
+          <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+        </button>
+
+        {/* Zoom Percentage / Quick 100% Reset Badge */}
+        <button
+          type="button"
+          onClick={handleResetZoom}
+          className="px-1.5 py-0.5 sm:py-1 text-[10px] font-mono font-medium text-amber-300/90 hover:text-amber-100 hover:bg-amber-400/20 rounded-lg transition-colors cursor-pointer"
+          title="Reset Cosmos Zoom to 100%"
+        >
+          {zoomPercent}%
+        </button>
+
+        {/* Zoom Out Button */}
+        <button
+          type="button"
+          onClick={handleZoomOut}
+          className="p-1.5 sm:p-2 rounded-xl text-white/75 hover:text-amber-200 hover:bg-amber-400/15 active:scale-90 transition-all cursor-pointer"
+          title="Zoom Out Celestial Map (-)"
+        >
+          <Minus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+        </button>
+
+        {/* Recenter Origin Button */}
+        <div className="w-4 h-[1px] bg-white/10 my-0.5" />
+        <button
+          type="button"
+          onClick={handleResetCamera}
+          className="p-1.5 rounded-xl text-white/50 hover:text-amber-300 hover:bg-amber-400/15 active:scale-90 transition-all cursor-pointer"
+          title="Recenter Sacred Map Coordinates"
+        >
+          <RotateCcw className="w-3 h-3 text-amber-400/80" />
+        </button>
+      </aside>
 
       {/* Floating Hover Whisper Tooltip */}
       {hoveredLetter && !isDraggingRef.current && (
@@ -776,7 +1231,7 @@ export default function ConstellationCanvas({
       )}
 
       {/* Bottom Subtle Navigation & Compliance */}
-      <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 pointer-events-auto z-10 w-full px-4">
+      <footer className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 sm:gap-1.5 pointer-events-auto z-10 w-full px-4">
         {/* Mobile Minimal Touch Gesture Hint */}
         <span className="sm:hidden pointer-events-none text-center text-[10px] tracking-widest text-white/30 font-mono">
           DRAG SKY • PINCH ZOOM • TAP STAR
@@ -786,24 +1241,36 @@ export default function ConstellationCanvas({
         <span className="hidden sm:inline pointer-events-none text-center text-[11px] tracking-wider text-white/30 font-light">
           DRAG TO EXPLORE COSMOS • SCROLL TO ZOOM • CLICK ANY STAR TO READ
         </span>
-        <div className="hidden sm:flex items-center gap-2.5 sm:gap-3 text-[10px] text-white/30 font-mono tracking-widest uppercase">
-          <a href="/chronicles" className="hover:text-amber-300/90 transition-colors">
+        <div className="hidden sm:flex items-center gap-2 sm:gap-3 text-[10px] text-white/30 font-mono tracking-widest uppercase">
+          <a href="/about" className="hover:text-amber-300 transition-colors">
+            About
+          </a>
+          <span>•</span>
+          <a href="/chronicles" className="hover:text-amber-300 transition-colors">
             Chronicles
           </a>
           <span>•</span>
-          <a href="/privacy" className="hover:text-amber-300/90 transition-colors">
+          <a href="/library" className="hover:text-amber-300 transition-colors">
+            Library
+          </a>
+          <span>•</span>
+          <a href="/faq" className="hover:text-amber-300 transition-colors">
+            FAQ
+          </a>
+          <span>•</span>
+          <a href="/privacy" className="hover:text-amber-300 transition-colors">
             Privacy
           </a>
           <span>•</span>
-          <a href="/terms" className="hover:text-amber-300/90 transition-colors">
+          <a href="/terms" className="hover:text-amber-300 transition-colors">
             Terms
           </a>
           <span>•</span>
-          <a href="/contact" className="hover:text-amber-300/90 transition-colors">
+          <a href="/contact" className="hover:text-amber-300 transition-colors">
             Contact
           </a>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

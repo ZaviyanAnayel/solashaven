@@ -15,7 +15,6 @@ import SacredStreakBanner from "../components/SacredStreakBanner";
 import UserProfileModal from "../components/UserProfileModal";
 import WhisperingWellModal from "../components/WhisperingWellModal";
 import AiFloatingOrb from "../components/AiFloatingOrb";
-import LibraryFloatingOrb from "../components/LibraryFloatingOrb";
 import CandleSanctuaryModal from "../components/CandleSanctuaryModal";
 import SanctuaryIntro from "../components/SanctuaryIntro";
 import CreatorIntelPulse from "../components/CreatorIntelPulse";
@@ -239,9 +238,6 @@ export default function HomePage() {
 
       {/* Floating Starlight AI Companion Orb (Floating Bottom-Right with Circular Star Motion) */}
       <AiFloatingOrb onOpenAi={() => setIsWellOpen(true)} />
-
-      {/* Floating Sanctuary Library & Light a Candle Orb (Floating Bottom-Left) */}
-      <LibraryFloatingOrb onOpenCandles={() => setIsCandleSanctuaryOpen(true)} />
 
       {/* Living 3D/Canvas Constellation with Earth Search, Depth Drift, Breath Scaling & Shooting Stars */}
       <ConstellationCanvas

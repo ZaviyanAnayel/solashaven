@@ -163,7 +163,7 @@ export default function CandleSanctuaryModal({
               The Sacred Flame
             </h1>
             <p className="text-[10px] text-white/40">
-              {isLit ? "Burning in the quiet stillness" : "Resting in darkness • Tap to ignite"}
+              {isLit ? "Burning in the quiet stillness" : "Resting in darkness • Click candle for peace"}
             </p>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function CandleSanctuaryModal({
 
           {/* Subtle click guide prompt */}
           <div className="mt-4 px-3 py-1 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-mono text-white/50 tracking-wider transition-all group-hover:text-amber-200 group-hover:border-amber-400/30">
-            {isLit ? "Click candle to blow out" : "Click candle to light"}
+            {isLit ? "Click candle to rest in stillness" : "Click candle for peace"}
           </div>
         </div>
       </main>

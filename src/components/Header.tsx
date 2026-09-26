@@ -101,13 +101,13 @@ export default function Header({
 
   return (
     <header className="fixed top-0 left-0 right-0 z-30 pointer-events-none">
-      <div className="mx-auto w-full max-w-[1700px] px-3 sm:px-6 py-2.5 sm:py-3.5 flex flex-col gap-2 sm:gap-2.5">
+      <div className="mx-auto w-full max-w-[1700px] px-2.5 sm:px-6 py-2 sm:py-3 flex flex-col gap-1.5 sm:gap-2">
         {/* Top Bar: Brand, Navigation, Tools */}
-        <div className="flex items-center justify-between pointer-events-auto w-full gap-2 sm:gap-4">
+        <div className="flex items-center justify-between pointer-events-auto w-full gap-2 sm:gap-4 min-w-0">
           {/* Logo & Vision */}
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <div className="relative flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-br from-amber-400/15 via-amber-500/5 to-purple-500/10 border border-amber-300/30 backdrop-blur-xl shadow-xl shadow-amber-500/15 group">
-              <svg viewBox="0 0 40 40" fill="none" className="w-5 h-5 sm:w-5.5 sm:h-5.5 transition-transform duration-700 group-hover:scale-110">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div className="relative flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-br from-amber-400/15 via-amber-500/5 to-purple-500/10 border border-amber-300/30 backdrop-blur-xl shadow-xl shadow-amber-500/15 group">
+              <svg viewBox="0 0 40 40" fill="none" className="w-4.5 h-4.5 sm:w-5.5 sm:h-5.5 transition-transform duration-700 group-hover:scale-110">
                 <defs>
                   <linearGradient id="solasGold" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FDE68A" />
@@ -151,13 +151,13 @@ export default function Header({
             </div>
             <div className="shrink-0">
               <div className="flex items-center gap-2">
-                <span className="font-semibold tracking-[0.14em] uppercase text-white/95 text-[14px] sm:text-[15px] font-serif">
+                <span className="font-semibold tracking-[0.14em] uppercase text-white/95 text-[13px] sm:text-[15px] font-serif">
                   Solas Haven
                 </span>
               </div>
-              <div className="flex items-center gap-2 mt-0.5 text-[10px] sm:text-[11px] text-white/50 font-light">
-                <span className="hidden md:inline">Where unspoken words find peace</span>
-                <span className="hidden md:inline text-white/20">•</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 mt-0.5 text-[10px] sm:text-[11px] text-white/50 font-light">
+                <span className="hidden 2xl:inline">Where unspoken words find peace</span>
+                <span className="hidden 2xl:inline text-white/20">•</span>
                 <button
                   type="button"
                   onClick={onOpenPrivacyModal}
@@ -165,14 +165,15 @@ export default function Header({
                   title="View Sanctuary Zero-Knowledge Guarantee"
                 >
                   <ShieldCheck className="w-3 h-3" />
-                  <span>100% Anonymous</span>
+                  <span className="hidden sm:inline">100% Anonymous</span>
+                  <span className="sm:hidden">Anon</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* Center Navigation: Responsive & Collision-Free (Never Overlaps) */}
-          <div className="hidden lg:flex items-center justify-center shrink-0">
+          <div className="hidden xl:flex items-center justify-center shrink-0">
             {/* Full Expanded Nav on Ultra-wide (2xl >= 1536px) */}
             <nav className="hidden 2xl:flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-2xl shadow-lg shadow-black/40">
               <Link
@@ -266,11 +267,11 @@ export default function Header({
               </Link>
             </nav>
 
-            {/* Compact 2-Pill Nav on Standard Laptops / Zoomed Screens (1024px to 1535px) */}
+            {/* Compact Nav on Standard Widescreen / Zoomed Screens (1280px to 1535px) */}
             <nav className="flex 2xl:hidden items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-2xl shadow-lg shadow-black/40">
               <Link
                 href="/chronicles"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
               >
                 <BookOpen className="w-3.5 h-3.5 text-amber-300" />
                 <span>Chronicles</span>
@@ -278,7 +279,7 @@ export default function Header({
 
               <Link
                 href="/library"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
               >
                 <Bookmark className="w-3.5 h-3.5 text-amber-400" />
                 <span>Library</span>
@@ -290,7 +291,7 @@ export default function Header({
                   if (onOpenCandles) onOpenCandles();
                   else window.location.href = "/candle";
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
                 title="Light a Candle — Kindle Solace in the Sacred Stillness"
               >
                 <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
@@ -299,7 +300,7 @@ export default function Header({
 
               <Link
                 href="/museum"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
               >
                 <Landmark className="w-3.5 h-3.5 text-amber-300" />
                 <span>Museum</span>
@@ -308,19 +309,19 @@ export default function Header({
           </div>
 
           {/* Right Action Tools Cluster */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
 
             {/* Earth Search Toggle (Desktop only, available in mobile menu) */}
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className={`hidden sm:flex p-2 rounded-full border text-xs transition-all backdrop-blur-xl cursor-pointer ${
+              className={`hidden sm:flex p-1.5 sm:p-2 rounded-full border text-xs transition-all backdrop-blur-xl cursor-pointer ${
                 isSearchOpen || searchLocation
                   ? "bg-amber-400/20 border-amber-400/50 text-amber-200 shadow-md shadow-amber-400/20"
                   : "bg-white/5 hover:bg-white/10 border-white/10 text-white/70 hover:text-white"
               }`}
               title={searchLocation ? `Filtered by ${searchLocation}` : "Filter stars by region"}
             >
-              <Globe2 className="w-4 h-4" />
+              <Globe2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
             {/* Sound Toggle */}
@@ -344,10 +345,10 @@ export default function Header({
             {userStarsCount > 0 && (
               <button
                 onClick={onFocusMyStar}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 hover:bg-amber-400/25 transition-all text-xs font-medium cursor-pointer"
+                className="hidden sm:flex items-center gap-1 px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-full bg-amber-400/15 border border-amber-400/40 text-amber-300 hover:bg-amber-400/25 transition-all text-xs font-medium cursor-pointer"
                 title="Locate your stars"
               >
-                <Star className="w-3.5 h-3.5 fill-amber-300" />
+                <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-amber-300" />
                 <span>{userStarsCount}</span>
               </button>
             )}
@@ -355,11 +356,11 @@ export default function Header({
             {/* Soul Profile Pill (Desktop only, prominent in mobile menu drawer) */}
             <button
               onClick={onOpenProfile}
-              className="hidden sm:flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 hover:border-amber-400/40 text-white transition-all text-xs font-medium shadow-sm cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 hover:border-amber-400/40 text-white transition-all text-xs font-medium shadow-sm cursor-pointer"
               title="Your Profile & Starlight Milestones"
             >
               <div
-                className={`w-5 h-5 rounded-full bg-gradient-to-tr ${currentAvatar.gradient} p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden`}
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gradient-to-tr ${currentAvatar.gradient} p-0.5 flex-shrink-0 flex items-center justify-center overflow-hidden`}
               >
                 {profile.customAvatarUrl ? (
                   <img
@@ -368,10 +369,10 @@ export default function Header({
                     className="w-full h-full rounded-full object-cover"
                   />
                 ) : (
-                  <Sparkles className="w-3 h-3 text-white" />
+                  <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" />
                 )}
               </div>
-              <span className="font-serif">{profile.name}</span>
+              <span className="font-serif hidden xl:inline truncate max-w-[100px]">{profile.name}</span>
               <span className="px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-mono flex items-center gap-0.5 font-semibold">
                 <Flame className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
                 <span>{profile.streak}d</span>
@@ -381,7 +382,7 @@ export default function Header({
             {/* Primary Action: Release a Star */}
             <button
               onClick={onOpenReleaseModal}
-              className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-3 sm:px-5 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-200 via-amber-100 to-amber-300 text-neutral-950 font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-amber-300/20 hover:shadow-amber-300/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer"
+              className="group relative inline-flex items-center gap-1 sm:gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-amber-200 via-amber-100 to-amber-300 text-neutral-950 font-semibold text-xs sm:text-sm tracking-wide shadow-lg shadow-amber-300/20 hover:shadow-amber-300/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 cursor-pointer shrink-0"
             >
               <Feather className="w-3 h-3 sm:w-3.5 sm:h-3.5 transition-transform group-hover:-rotate-12" />
               <span>Release</span>
@@ -391,7 +392,7 @@ export default function Header({
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(true)}
-              className="2xl:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-amber-400/35 bg-amber-400/10 hover:bg-amber-400/20 text-amber-200 hover:text-white transition-all backdrop-blur-xl cursor-pointer shadow-sm active:scale-95"
+              className="2xl:hidden flex items-center gap-1 sm:gap-1.5 px-2.5 py-1.5 rounded-full border border-amber-400/35 bg-amber-400/10 hover:bg-amber-400/20 text-amber-200 hover:text-white transition-all backdrop-blur-xl cursor-pointer shadow-sm active:scale-95 shrink-0"
               title="Open Sanctuary Navigation Drawer"
             >
               <Menu className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
@@ -524,8 +525,8 @@ export default function Header({
         )}
 
         {/* Category Pills (Sub-Nav - Fluidly Centered, Never Clipped on Zoom) */}
-        <div className="pointer-events-auto w-full overflow-x-auto scrollbar-none py-1 px-1 flex justify-start lg:justify-center">
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 px-2 sm:px-4 mx-auto">
+        <div className="pointer-events-auto w-full overflow-x-auto scrollbar-none py-0.5 sm:py-1 px-1 flex">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 min-w-max mx-auto px-2 sm:px-4">
             {CATEGORIES.map((cat) => {
               const isSelected = selectedCategory === cat.id;
               return (

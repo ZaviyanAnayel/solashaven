@@ -18,30 +18,6 @@ export default function SanctuaryIntro() {
           into a living cosmos shared across 195+ nations.
         </p>
       </div>
-
-      {/* Quiet footer pathways */}
-      <nav
-        aria-label="Sanctuary pathways"
-        className="absolute inset-x-0 bottom-3 z-10 flex justify-center pointer-events-none"
-      >
-        <div className="pointer-events-auto flex items-center gap-4 text-[11px] tracking-[0.2em] uppercase text-white/35">
-          <a href="/about" className="hover:text-white/70 transition-colors">
-            About
-          </a>
-          <span aria-hidden="true">✦</span>
-          <a href="/chronicles" className="hover:text-white/70 transition-colors">
-            Chronicles
-          </a>
-          <span aria-hidden="true">✦</span>
-          <a href="/library" className="hover:text-white/70 transition-colors">
-            Library
-          </a>
-          <span aria-hidden="true">✦</span>
-          <a href="/faq" className="hover:text-white/70 transition-colors">
-            FAQ
-          </a>
-        </div>
-      </nav>
     </>
   );
 }
