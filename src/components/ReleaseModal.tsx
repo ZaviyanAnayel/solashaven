@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { CATEGORIES, Letter, LetterCategory } from "../lib/types";
+import { CATEGORIES, Letter, LetterCategory, ReleaseRitual } from "../lib/types";
 import { X, Sparkles, Send, Globe2, AlertCircle, Compass, ShieldCheck, Loader2, BookOpen } from "lucide-react";
 import { soundEngine } from "../lib/audio";
 import { validateSanctuaryContent } from "../lib/moderation";
@@ -26,6 +26,7 @@ export default function ReleaseModal({
   const [recipient, setRecipient] = useState("");
   const [content, setContent] = useState(prefilledContent);
   const [category, setCategory] = useState<LetterCategory>("unsent");
+  const [releaseRitual, setReleaseRitual] = useState<ReleaseRitual>("star");
   const [locationName, setLocationName] = useState("");
   const [language, setLanguage] = useState("en");
   const [isLongLetterMode, setIsLongLetterMode] = useState(false);
@@ -126,13 +127,23 @@ export default function ReleaseModal({
   const executeReleaseStar = () => {
     setIsSubmitting(true);
 
-    soundEngine.playCelestialAscension();
+    if (releaseRitual === "lantern") {
+      soundEngine.playPrayerAscensionChime();
+    } else {
+      soundEngine.playCelestialAscension();
+    }
+
+    const ritualColors: Record<ReleaseRitual, string[]> = {
+      star: ["#fbbf24", "#ffffff", "#38bdf8", "#f43f5e"],
+      lantern: ["#f59e0b", "#d97706", "#fbbf24", "#ffffff"],
+      crane: ["#ffffff", "#e0f2fe", "#f1f5f9", "#cbd5e1"],
+    };
 
     confetti({
-      particleCount: 45,
-      spread: 70,
+      particleCount: 50,
+      spread: 75,
       origin: { y: 0.8 },
-      colors: ["#fbbf24", "#ffffff", "#38bdf8", "#f43f5e"],
+      colors: ritualColors[releaseRitual],
       disableForReducedMotion: true
     });
 
@@ -177,6 +188,7 @@ export default function ReleaseModal({
       whispers: [],
       isTimeCapsule,
       igniteDate,
+      releaseRitual,
       x,
       y,
       size: 5.0 + Math.random() * 1.5,
@@ -527,6 +539,39 @@ export default function ReleaseModal({
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Sacred Release Ritual Choice */}
+          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-medium text-white/90 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>SACRED RELEASE VESSEL</span>
+              </label>
+              <span className="text-[10px] text-amber-300/80 font-mono">Choose Ritual</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: "star" as const, label: "Eternal Star", icon: "✦", desc: "Ascends into starlight" },
+                { id: "lantern" as const, label: "Sky Lantern", icon: "🏮", desc: "Floats on warm embers" },
+                { id: "crane" as const, label: "Origami Crane", icon: "🕊", desc: "Wings of quiet peace" },
+              ].map((r) => (
+                <button
+                  key={r.id}
+                  type="button"
+                  onClick={() => setReleaseRitual(r.id)}
+                  className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    releaseRitual === r.id
+                      ? "bg-amber-400/20 border-amber-400/60 text-white shadow-sm shadow-amber-400/20"
+                      : "bg-white/[0.02] border-white/10 text-white/50 hover:text-white hover:bg-white/[0.05]"
+                  }`}
+                >
+                  <div className="text-base sm:text-lg mb-0.5">{r.icon}</div>
+                  <div className="text-[11px] font-semibold text-white/90 truncate">{r.label}</div>
+                  <div className="text-[9px] text-white/40 leading-tight hidden sm:block">{r.desc}</div>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="pt-2">

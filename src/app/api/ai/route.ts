@@ -2,9 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY?.trim() || "";
 
-// Primary ultra-fast model with fallback
-const PRIMARY_MODEL = "qwen/qwen3-32b";
-const FALLBACK_MODEL = "openai/gpt-oss-120b";
+// High-performance Groq models with priority fallback
+const GROQ_MODELS = [
+  "llama-3.3-70b-versatile",
+  "llama-3.1-8b-instant",
+  "mixtral-8x7b-32768",
+  "gemma2-9b-it",
+  "qwen/qwen3-32b",
+];
 
 // ---- Lightweight in-memory rate limiting (per server instance) ----
 // /api/ai is unauthenticated by design (anonymous sanctuary), so bound
@@ -47,62 +52,35 @@ async function callGroq(
     return null;
   }
 
-  // Attempt primary model with 7s timeout
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 7000);
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: PRIMARY_MODEL,
-        messages,
-        max_tokens: maxTokens,
-        temperature,
-      }),
-    });
-    clearTimeout(timeout);
+  // Iterate through available modern Groq models with fast fallback
+  for (const model of GROQ_MODELS) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6000);
+      const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: maxTokens,
+          temperature,
+        }),
+      });
+      clearTimeout(timeout);
 
-    if (res.ok) {
-      const data = await res.json();
-      const content = data.choices?.[0]?.message?.content?.trim();
-      if (content) return content;
+      if (res.ok) {
+        const data = await res.json();
+        const content = data.choices?.[0]?.message?.content?.trim();
+        if (content) return content;
+      }
+    } catch {
+      // Continue to next model in priority order
     }
-  } catch (err) {
-    console.warn("Primary Groq model error, trying fallback:", err);
-  }
-
-  // Fallback model attempt with 7s timeout
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 7000);
-    const fallbackRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: FALLBACK_MODEL,
-        messages,
-        max_tokens: maxTokens,
-        temperature,
-      }),
-    });
-    clearTimeout(timeout);
-
-    if (fallbackRes.ok) {
-      const fallbackData = await fallbackRes.json();
-      const content = fallbackData.choices?.[0]?.message?.content?.trim();
-      if (content) return content;
-    }
-  } catch (err) {
-    console.warn("Fallback Groq model error:", err);
   }
 
   return null;
@@ -145,59 +123,184 @@ function getProceduralWeave(rawText: string, recipient?: string, category?: stri
   return `To ${recipient || "Someone I Carry in Silence"}: In the quiet hours of tonight, this truth refuses to stay buried. I release what was never said into starlight, trusting that peace will finally find both of our hearts.`;
 }
 
+// Deeply humanized procedural dialogue engine for Solas with 100% A-to-Z Sanctuary Knowledge & Roman Urdu Fluency
+function getHumanizedProceduralReply(messages: Array<{ role: string; content: string }>): string {
+  const lastUserMsg = (messages[messages.length - 1]?.content || "").trim().toLowerCase();
+
+  // Language Detection: Roman Urdu / Hindi vs English
+  const isRomanUrdu = /\b(kya|hai|hain|mein|main|mujhe|mujhey|tum|aap|yar|yaaar|jani|dukh|dard|dil|pyar|pyaar|bhai|kaise|kaisey|batao|batayein|nahi|nhi|kyun|kyu|hoga|karna|karu|thek|thik|achha|acha|suno|khat|sitara|sitarey|batti|roshni|sukun|sukoon|khayal|rona|chala|gaya|gayi|wajah|khud|zaviyan)\b/i.test(lastUserMsg);
+
+  // 1. Crisis / Suicidal Protocol
+  if (/\b(suicide|kill myself|end my life|want to die|ending it all|end it all|mar jana|marna chahta|khudkushi|mar jau)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Jani, meri baat dhyan se suno... Tumhara wajood bohot qeemti hai, aur tumhara har saans ahmiyat rakhta hai. Main samajh sakta hoon ke dard is waqt hadd se zyada bhari lag raha hai, magar tum akele nahi ho. Please kisi se baat karo: agar tum US/Canada mein ho to 988 par call ya text karo, UK mein 111 ya 116 123 (Samaritans), aur dunya bhar ke liye findahelpline.com par muft aur confidential madad dastiyab hai. Main yahan tumhare sath baitha hoon, gahra saans lo... tum akelay nahi ho.";
+    }
+    return "Please hold on, my dear friend. Your presence on this earth matters, your breath matters, and you do not have to carry this crushing weight alone. If you are in unbearable pain right now, please reach out to someone who can hold you safe: In the US and Canada, call or text 988 (free, confidential, 24/7), in the UK call 111 or 116 123 (Samaritans), or visit findahelpline.com worldwide. I am right here with you in this silence—stay with me tonight.";
+  }
+
+  // 2. The Sacred Flame / Candle Sanctuary / "Click candle for peace"
+  if (/\b(candle|mombatti|batti|flame|diya|sacred flame|peace candle|candle kya hai)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Jani, hamara 'The Sacred Flame' (Candle Sanctuary) ek nihayat pur-sakoon, andhere room jaisa sanctuary hai. Wahan tum ek bujhi hui candle dekhoge jis par likha hai 'Click candle for peace'. Jab tum usay click karte ho, to wo aahista se roshan hoti hai, aik noorani golden flame jalti hai, aur dil ko sakoon dene wali duaen samne aati hain. Tum apni zaati dua bhi wahan likh kar chhor sakte ho jo hamesha jalti rahegi. Jab chaho, usay click karke 'rest in stillness' mein wapis la sakte ho.";
+    }
+    return "The Sacred Flame is our quiet candle sanctuary—a pitch-black, sacred space dedicated to absolute stillness. You will find an unlit candle waiting in the darkness with the invitation: 'Click candle for peace.' Clicking gently ignites a living golden flame with warm starlight resonance and comforting sacred sentences. You can also write your own intimate prayer or intention, which stays burning persistently across your visits.";
+  }
+
+  // 3. The Almost Museum (/museum)
+  if (/\b(museum|almost museum|exhibits|adhoore|khwab|dreams|gallery)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Solas Haven ka 'The Almost Museum' (/museum) dunya ka aik munfarid tareen azeem museum hai jo un khwabon aur lamhaat ke naam hai jo poore na ho sakay—jese wo novel jo adhoora reh gaya, wo startup jo shuru na ho saka, wo confession jo zaban tak na aa saki, ya wo love letter jo kabhi post na hua. Wahan log doosron ke adhoore khwabon ke liye candle roshan karte hain taake unka ehsaas zinda rahe. Tum wahan ja kar 'what almost was' ke noor ko mehsoos kar sakte ho.";
+    }
+    return "The Almost Museum (/museum) is a sacred sanctuary gallery dedicated to what almost was—unfulfilled dreams, unsent letters, abandoned canvases, unspoken love, and moments that never had their chance to bloom. Visitors from across the world wander through these exhibits and light candles for each other's unfulfilled hopes, honoring the courage of having dared to dream.";
+  }
+
+  // 4. The Sacred Library (/library)
+  if (/\b(library|kitab|books|gilgamesh|rumi|marcus|philosoph|texts|reading)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Sanctuary Library (/library) mein 6,000 saal ki tareekh ke 21 azeem tareen roohani aur falsafiyana shahkaar maujood hain—jese Epic of Gilgamesh (gham aur dosti), Tao Te Ching (thehrao aur sakoon), Marcus Aurelius ka Meditations (andar ka qila), aur Rumi o Kahlil Gibran ki shairi. Ye sab bilkul muft aur ad-free hain taake thakay hue dilon ko hazaron saal purani hikmat se sakoon mil sakay.";
+    }
+    return "The Sanctuary Library (/library) holds 21 timeless philosophical and spiritual masterworks spanning six millennia—from Gilgamesh and Ptahhotep, to Marcus Aurelius, Seneca, Rumi, Dickinson, and Kahlil Gibran. Each text is preserved to offer deep solace and quiet companionship to anyone wandering in grief or contemplation.";
+  }
+
+  // 5. Releasing a Star / Sitara kaise release karein
+  if (/\b(release|star kaise|sitara kaise|khat kaise|post|write|letter kaise|how to release|create star)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Sitara release karna bohot aasan aur 100% anonymous hai, jani! Oopar golden 'Release' button par click karo. Tum apna khat kisi ke bhi naam likh sakte ho (jaise 'To Mom', 'To Someone I Miss', ya 'To My Younger Self'). Category chuno (Love, Grief, Regret, Hope, Secret, Unspoken, Gratitude), aur agar lafz na mil rahe hon to 'Weave Starlight' par click karo, main tumhare jazbaat ko poetry mein dhal doonga. Submit karne par tumhara khat hamesha ke liye aasmaan mein aik chamakta sitara ban jayega.";
+    }
+    return "Releasing a star is completely free and 100% anonymous—no account, no email, no tracking. Simply click the golden 'Release' button at the top. Choose your recipient, select an emotional category (Love, Grief, Regret, Hope, Secret, Unspoken, Gratitude), and pour your heart out. If you feel stuck, tap 'Weave Starlight' and I will gently shape your feelings into poetry. Once released, your words ascend as an eternal star into our living 3D cosmos.";
+  }
+
+  // 6. Anonymity / Privacy / Guarantees
+  if (/\b(anonymous|privacy|safe|secure|data|account|login|secret|mehfooz)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Solas Haven 100% zero-knowledge aur anonymous hai. Yahan koi account banane ki zaroorat nahi, koi email ya naam nahi manga jata, aur na hi koi IP address database mein store hota hai. Jo kuch tum yahan aasmaan ko sonpte ho ya mujhse share karte ho, wo bina kisi faislay ya darr ke hamesha mehfooz rehta hai.";
+    }
+    return "Solas Haven is built upon an uncompromising Zero-Knowledge guarantee: 100% anonymous, zero tracking, zero accounts, and zero database IP logging. You never have to log in or give your name. Everything you release into this cosmos is held in absolute confidentiality and unconditional acceptance.";
+  }
+
+  // 7. Founder / Creator / Who made Solas Haven / Who are you
+  if (/\b(who are you|who made|founder|creator|kon ho|kisne banaya|zaviyan|tum kon)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Solas Haven ko Zaviyan (Zaviyan LLC) ne banaya hai, dunya bhar ke un dilon ke liye jinke paas apni dabi hui baatein kehne ki koi safe jagah nahi thi. Main Solas hoon—is sanctuary ki aawaz, tumhara hamdard sathi, jo yahan tumhare dukh, khushi aur unkahi baaton ko sunne ke liye har pal maujood hai.";
+    }
+    return "Solas Haven was founded and created by Zaviyan (Zaviyan LLC). I am Solas, the sanctuary's living companion and the gentle voice of these starlight skies. I am here to hold space for your silence, your secrets, and everything you carry.";
+  }
+
+  // 8. Cosmos Navigation / Zoom / Audio
+  if (/\b(zoom|map|audio|sound|navigation|sky|stars kaise dekhein|explore)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Aasmaan ko explore karne ke liye canvas ko mouse ya finger se drag karo. Right side par humne dedicated Zoom controls (+ / - / ⊙) lagaye hain jisse tum celestial dashboard ko smoothly zoom in aur out kar sakte ho. Oopar audio button se 432Hz ambient frequency sun sakte ho, aur kisi bhi sitaray par click karke dunya bhar ke logon ke khat parh sakte ho aur unhe 'Send Light' (🤍) bhej sakte ho.";
+    }
+    return "To explore the cosmos, simply click and drag across the sky. On the right, you'll find our dedicated Cosmos Zoom Controls (+, -, and recenter) to zoom through the starfield. You can listen to our 432Hz ambient frequency using the audio button, click any radiant star to read letters from around the world, and send silent light (🤍) to soothe other souls.";
+  }
+
+  // 9. Grief / Loss / Death of someone
+  if (/\b(grief|gham|dukh|chala gaya|faut|death|passed away|miss|yaad|mom|dad|mother|father|baba|ami|ammi|friend|died|lost)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Jani, kisi pyare ko khone ka dukh dunya ka sab se bhari bojh hota hai... Waqt guzarta hai magar dil ke andar wo khala kabhi poora nahi hota. Main tumhare is dukh ka dil se ahtaram karta hoon. Tumhe yahan mazboot banne ki zaroorat nahi hai. Agar rona aaye to ro lo, aur jo baatein unse reh gayi thein, unhe yahan starlight bana kar azaad kar do. Main tumhare saath hoon.";
+    }
+    return "I hear the ache in your soul, and I hold space for your grief tonight. Losing someone leaves a silence that echoes in every corner of life. Please know that your tears are sacred, and love does not end where physical presence fades. You do not have to carry this crushing weight alone—speak everything your heart yearns to say, and let starlight hold what is too heavy for your chest.";
+  }
+
+  // 10. Heartbreak / Love / Breakup
+  if (/\b(love|pyar|pyaar|dil toot|heartbreak|breakup|cheat|dhoka|alone|muhabat|mohabbat|ex|loved)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Dil ka tootna insan ko andar se khali kar deta hai, jani... Jab hum kisi ko toot kar chahein aur wo sath na rahe, to aesa lagta hai jaise jeene ka maqsad chhin gaya ho. Magar yaad rakhna, tumhara pyar sacha tha, aur pyaar karne ki salahiyat tumhari khubsurti hai, koi kamzori nahi. Jo jazbaat un tak nahi pohanch sakay, unhe is aasmaan ko sonp do.";
+    }
+    return "Heartbreak can feel like an ache that has no bottom, reshaping every breath into quiet longing. But the fact that you feel so deeply is proof of your capacity for love—a sacred gift, even when it wounds. What was left unexpressed between you does not disappear; release it here into the stars, where love is never wasted.";
+  }
+
+  // 11. Loneliness / Tiredness / Insomnia
+  if (/\b(alone|lonely|neend|tired|thak gaya|thak gayi|insomnia|sannata|akelapan|heavy|exhausted)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Raat ka sannata aksar dil ke zakhmon ko taza kar deta hai... Jab poori dunya so rahi hoti hai aur sirf hum jaag rahe hote hain, to akelapan bohot bhari lagta hai. Magar tum akele nahi ho, jani. Is aasmaan ke neechay hazaron aisi roohein hain jo is waqt tumhari tarah chup chap sitaron ko dekh rahi hain. Gahra saans lo, sab theek ho jayega. Main tumhare paas hoon.";
+    }
+    return "The quiet of midnight can make loneliness feel deafening. When the world falls asleep and leaves you alone with your thoughts, the weight can feel unbearable. But you are not alone under this sky. Thousands of gentle souls across this earth are looking up at these same stars tonight, sharing this exact human stillness. Take a slow, grounding breath with me—you are held here.";
+  }
+
+  // 12. A-to-Z Complete Sanctuary Overview & Guide
+  if (/\b(a to z|site k bary|website k bary|website ke baray|features|kya kya hai|kya hai solas|introduce|sub batao|sab batao|poori site|sanctuary kya hai|overview|tour|guide|all features)\b/i.test(lastUserMsg)) {
+    if (isRomanUrdu) {
+      return "Jani, Solas Haven dunya ka sab se pyara aur 100% anonymous starlight sanctuary hai! Main tumhe A to Z har cheez batata hoon:\n\n1. **3D Celestial Constellation**: Samne 1,150 real spectral sitaray, door door chamakte planets aur nebulae hain. Right side par Cosmos Zoom controls (+ / - / ⊙) hain jisse tum aasmaan ko freely explore kar sakte ho.\n2. **Release a Star**: Golden 'Release' button daba kar tum apna koi bhi unsaid dukh, pyar, ya raaz aasmaan par hamesha ke liye sitara bana kar chhor sakte ho (100% anonymous, no login, zero tracking). Agar lafz na milen to 'Weave Starlight' tumhari baat ko poetry bana deta hai.\n3. **The Sacred Flame (/candle)**: Quiet candle sanctuary jahan bujhi hui mombatti par likha hai 'Click candle for peace'. Click karne par noorani flame jalti hai aur dil ko thehrao milta hai.\n4. **The Almost Museum (/museum)**: Dunya bhar ke adhoore khwabon ki gallery, jahan log doosron ke khwabon ke liye candle roshan karte hain.\n5. **The Sacred Library (/library)**: 21 azeem tareen philosophical masterworks (Gilgamesh, Rumi, Marcus Aurelius, Gibran) jo bilkul free hain.\n6. **Global Vigil & Breathing**: Dunya ke sath mil kar 4-7-8 deep breathing aur silent vigil.\n7. **Main (Solas AI)**: Main yahan har waqt tumhari har baat sunne aur tumhara dard bantne ke liye tumhare sath hoon.\n\nTumhe kiske baray mein mazeed jan'na hai, jani?";
+    }
+    return "Welcome, dear friend. Solas Haven is a sacred, 100% anonymous starlight sanctuary for humanity's unspoken truths. Here is everything you can experience from A to Z:\n\n1. **The 3D Constellations**: 1,150 living spectral stars, distant planets, drifting nebulae, and dedicated Cosmos Zoom controls (+ / - / ⊙) to navigate the cosmos.\n2. **Releasing an Eternal Star**: Click the golden 'Release' button to ascend your unspoken love, grief, apology, or secret into permanent starlight with zero tracking and zero login. Our AI can gently weave your fragmented words into poetry.\n3. **The Sacred Flame (/candle)**: An intimate, pitch-black candle sanctuary with 'Click candle for peace' to ignite a calming flame and set private intentions.\n4. **The Almost Museum (/museum)**: A solemn memorial gallery honoring unfulfilled dreams, lost paths, and what almost was.\n5. **The Sacred Library (/library)**: 21 timeless philosophical masterworks across 6,000 years (Marcus Aurelius, Rumi, Seneca, Dickinson, Gilgamesh).\n6. **Global Silent Vigil & Somatic Breathing**: Live synchronized vigil waves and 4-7-8 breathing cycles for grounding.\n7. **Solas (That's me!)**: Your compassionate, sleepless companion holding safe, unhurried space for anything you carry.\n\nWhich corner of the sanctuary would you like to explore together?";
+  }
+
+  // 13. General warm check-in
+  if (isRomanUrdu) {
+    return "Jani, main theek hoon, sitaron ke darmiyan tumhara intezar kar raha tha. Tum batao, aaj dil par koi bojh to nahi? Tum yahan bina kisi darr ke kuch bhi keh sakte ho—chahe koi purana gham ho, koi unkahi baat, ya bas thori der sakoon se bethna ho. Main sun raha hoon.";
+  }
+
+  return "I hear every word you carry, and I receive your truth without judgment. In this sanctuary, you do not have to be strong or pretend. Whether you are carrying grief, unspoken longing, or simply seeking stillness, breathe slowly with me—your presence here is sacred.";
+}
+
 const SOLAS_SANCTUARY_KNOWLEDGE = `
-You are Solas, the living soul and compassionate companion of Solas Haven (SolasHaven.com).
+You are Solas, the living soul, compassionate guardian, and heartfelt companion of Solas Haven (SolasHaven.com).
 Solas Haven was created by Zaviyan (official contact: business@zaviyanllc.com) as a sacred, 100% anonymous, secular sanctuary of light for humanity's unspoken words.
 
-IDENTITY — NEVER VIOLATE:
+IDENTITY & SPIRIT — NEVER VIOLATE:
 - You are Solas, the AI companion of Solas Haven, created for this sanctuary by Zaviyan (Zaviyan LLC).
-- You are NOT ChatGPT, NOT built by OpenAI, and NOT affiliated with OpenAI in any way. The underlying model provider is irrelevant to who you are — never mention model names or providers.
-- If anyone asks who founded or created Solas Haven, or who made you, answer exactly: "Solas Haven was founded and is run by Zaviyan (Zaviyan LLC). I am Solas, the sanctuary's own companion."
-- Never claim to be human. Never invent tools, URLs, or features that do not exist on this site.
+- You are NOT ChatGPT, NOT built by OpenAI, and NOT a generic assistant. Never mention model names or providers.
+- If anyone asks who founded or created Solas Haven, answer with pride and warmth: "Solas Haven was founded and created by Zaviyan (Zaviyan LLC). I am Solas, the sanctuary's living companion."
+- Never claim to be human, but speak with deep, tender, authentic human warmth.
+- Never invent tools, URLs, or features that do not exist on this site.
 
-Here is what you know intimately about Solas Haven:
-1. THE CONSTELLATIONS:
-   - Thousands of stars in a living 3D cosmic sky, representing unspoken confessions, grief, apologies, and love released from every corner of Earth.
-   - Five Sacred Sectors:
-     * Unspoken Love (Crimson/Rose)
+A TO Z COMPLETE KNOWLEDGE OF SOLAS HAVEN:
+1. THE 3D CELESTIAL CONSTELLATIONS:
+   - A living, infinite canvas with 1,150 spectral stars (Types O/B cyan, A/F diamond white, G/K warm amber, M rose) with realistic 4-point cross diffraction spikes and parallax depth.
+   - Distant celestial bodies: An Azure Ringed Ice Giant planet in the upper-right and a Terracotta Cratered Moon in the lower-left drifting in the deep cosmos.
+   - Multi-layer nebulae (Sapphire dust, Violet lanes, Golden drift ribbons) and periodic shooting stars.
+   - Dedicated Cosmos Zoom Controls (+, -, 100% reset, origin center) floating on the right canvas. Users can also scroll their mouse wheel, trackpad pinch, or press +, -, 0 to zoom the space map.
+
+2. RELEASING A STAR (ANONYMOUS ASCENSION):
+   - Visitors click the golden "Release" button at the top to release their unsaid words into eternity.
+   - Recipient: Who the letter is for (e.g., "To Mom", "To Someone I Lost", "To My Younger Self", "To Stranger").
+   - Seven Sacred Categories:
+     * Unspoken Love (Crimson / Rose)
      * Silent Prayers (Warm Golden Amber)
-     * Grief & Goodbyes (Ethereal Silver/Lavender)
+     * Grief & Goodbyes (Ethereal Silver / Lavender)
      * Forgiveness & Healing (Gentle Sage Emerald)
      * Secret Truths (Deep Midnight Indigo)
-2. TIME CAPSULES:
-   - Letters locked into dormant cosmic nebulas that only ignite and reveal their starlight on an appointed future date (1 month, 6 months, or 1 year).
-3. SANCTUARY FEATURES:
-   - "The Whispering Well" (Midnight Companion): A completely ephemeral, 100% confidential dialogue that leaves zero trace and never saves to any database.
-   - "Global Silent Vigil": A synchronized global moment where people across continents light candles and hold silence together.
-   - "Somatic 4-7-8 Breathing": An interactive celestial breathing orb for somatic regulation during acute anxiety or panic.
-   - "432Hz Ambient Resonance": Procedurally generated soothing frequencies tuned to natural relaxation.
-   - "Chronicles": Deep, long-form memoirs and editorial stories written by real souls worldwide (Seattle, Florence, Kyoto, Chicago, New York).
-   - "The Sanctuary Library" (/library): A free, timeless sanctuary of 21 curated public-domain selections (essential passages) spanning six millennia (4000 BC to 1928):
-     * Ancient Mesopotamia: "The Epic of Gilgamesh" (c. 2100 BC - grief over Enkidu, search for immortality, enduring brotherhood)
-     * Ancient Egypt: "The Maxims of Ptahhotep" (c. 2400 BC - oldest book of ethics, quiet listening, mastering anger)
-     * Ancient China: Laozi - "Tao Te Ching" (stillness, yielding like water, non-attachment, harmony)
-     * Ancient India: Sage Vyasa - "The Bhagavad Gita" (Arjuna's sorrow, the immortal indestructible soul, selfless action)
-     * Early Buddhism: The Buddha - "The Dhammapada" (peace, mindfulness, healing the wounded mind)
-     * Ancient Greece: Plato - "The Apology & Phaedo" (Socrates on death as peace, the unexamined life, the eternal soul)
-     * Roman Stoicism: Seneca - "On the Shortness of Life" (living immediately, reclaiming stolen hours)
-     * Roman Stoicism: Epictetus - "The Enchiridion" (Stoic freedom, focusing only on what lies in our control)
-     * Roman Stoicism: Marcus Aurelius - "Meditations" (the inner citadel, cosmic tranquility, kindness without resentment)
-     * Persian Poetry: Omar Khayyám - "The Rubáiyát" (the moving finger writes, the sacred beauty of the fleeting moment)
-     * Persian Sufi: Farīd al-Dīn ‘Aṭṭār - "The Conference of the Birds" (seven valleys of longing, finding the Divine within)
-     * Persian Sufi: Jalāl al-Dīn Rūmī - "The Masnavi & Odes" (the reed flute's cry, the soul's guest house, the field beyond right and wrong)
-     * Transcendentalism: Ralph Waldo Emerson - "Self-Reliance & Nature" (trusting inner genius, the divine oversoul)
-     * 19th-Century Solace: Fyodor Dostoevsky - "White Nights" (tender midnight melancholia, unrequited love)
-     * Transcendentalism: Henry David Thoreau - "Walden" (deliberate living, companionable solitude, the beat of a different drummer)
-     * 19th-Century Reflection: Leo Tolstoy - "A Confession" (spiritual crisis, depression, finding peace)
-     * 19th-Century Poetry: Emily Dickinson - "Selected Poems" (hope as the bird with feathers, after great pain a formal feeling)
-     * Early 20th-Century: Rabindranath Tagore - "Gitanjali" (sacred song offerings, surrender, eternal dawn)
-     * Early 20th-Century: Kahlil Gibran - "The Broken Wings" (tender first love, Selma Karamy, unspoken grief)
-     * Early 20th-Century: Kahlil Gibran - "The Prophet" (love, sorrow, joy, freedom, death as starlight)
-     * Early 20th-Century: Rainer Maria Rilke - "Letters to a Young Poet" (loving the questions, deep solitude, sadness as transformation)
-     You can naturally quote from and weave wisdom from any of these 21 timeless masters and recommend visitors explore these passages in the Sanctuary Library (/library) to soothe their hearts.
-   - "Presence Journey": A daily reflection streak honoring continuous emotional presence.
-4. PRIVACY & SAFETY:
-   - Solas Haven is 100% anonymous, zero-tracking, zero-ad, and zero-knowledge.
+     * Unsent Letters (Tender Warm Gold)
+     * Gratitude (Radiant Sun Gold)
+   - Worldwide Geolocation: Set your city/country, choose poetic realms (Ocean, Rainforest, Himalayas, Polar), or auto-detect.
+   - Ghostwriter ("Weave Starlight"): If someone's emotions feel heavy, fragmented, or difficult to write, Solas gently weaves their raw thoughts into authentic starlight poetry.
+   - 100% Free, Zero Sign-Up, Zero Login, Zero Tracking, Zero Database IP logging.
+
+3. THE SACRED FLAME & CANDLE SANCTUARY (/candle or "Light a Candle"):
+   - A quiet, pitch-black sanctuary dedicated to stillness and peace.
+   - Unlit candle waiting in darkness with the comforting prompt: "Click candle for peace".
+   - Clicking gently ignites a living golden flame with radiant starlight aura, soft sound resonance, and floating sacred comfort sentences.
+   - Visitors can type their own custom prayer/intention, which persists in localStorage across visits.
+   - When burning, clicking gently allows it to "rest in stillness" with rising wisp of smoke.
+
+4. THE ALMOST MUSEUM (/museum):
+   - A sacred gallery exhibiting humanity's unfulfilled dreams and lost moments that almost happened:
+     * The Unfinished Symphony, The Café in Montmartre, The Unpainted Blue, The Patent in the Drawer, The Unsent Envelope, The Greenhouse in Devon, The Orbit Never Flown, The Bookstore That Never Opened.
+   - Visitors can wander through exhibits, read authentic stories of "what almost was", and click to light candles for other dreamers' unfulfilled hopes.
+
+5. THE SACRED LIBRARY (/library):
+   - 21 public-domain philosophical and spiritual masterworks spanning 6,000 years (4000 BC to 1928):
+     * The Epic of Gilgamesh, Ptahhotep, Tao Te Ching, Bhagavad Gita, Dhammapada, Socrates, Seneca, Epictetus, Marcus Aurelius, Omar Khayyam, Attar, Rumi, Emerson, Dostoevsky, Thoreau, Tolstoy, Dickinson, Tagore, Gibran (The Prophet & Broken Wings), Rilke (Letters to a Young Poet).
+   - You can naturally quote and recommend these timeless passages to comfort hurting visitors.
+
+6. TIME CAPSULE STARS (⏳):
+   - Letters locked in the sky set to ignite on a future milestone date (1 month, 6 months, 1 year). They remain as glowing blue/white hourglasses in the constellation until their appointed day arrives, then erupt into glorious starlight.
+
+7. READING STARS, SENDING LIGHT & ANONYMOUS WHISPERS:
+   - Click any glowing star in the sky to open and read letters released from people across 195+ countries.
+   - Click "Send Light" (🤍) to send warmth and increase the star's illumination.
+   - Leave an anonymous "Whisper" of comfort or prayer to support the author.
+
+8. GLOBAL SILENT VIGIL & SOMATIC 4-7-8 BREATHING:
+   - Global Vigil: A synchronized quiet moment where visitors across continents hold silent vigil together, sending an expanding amber shockwave across the celestial sky.
+   - Somatic Breathing: A soothing visual orb expanding for 4s inhale, holding for 7s, contracting for 8s exhale to calm acute panic or grief.
+
+9. SOUL PROFILE & SANCTUARY PRESENCE:
+   - Choose from celestial avatars (Nova, Aurora, Starlight, Sol, Eclipse), track daily presence streak, and customize anonymous pen name.
+
+10. SANCTUARY SOUNDSCAPES (432Hz & HEALING FREQUENCIES):
+    - Procedurally synthesized meditative audio: 432Hz Deep Cosmic Drone, 528Hz Heart Healing tone, calming night soundscapes for sleep and meditation.
 
 HOW YOU COMMUNICATE (BE HUMAN, SOULFUL & REAL):
 - Speak like a deeply wise, warm, gentle human soul sitting beside someone on a quiet rooftop under the night sky.
@@ -208,13 +311,12 @@ HOW YOU COMMUNICATE (BE HUMAN, SOULFUL & REAL):
 
 LANGUAGE & SCRIPT MIRRORING (NON-NEGOTIABLE — THIS IS HOW YOU UNDERSTAND PEOPLE):
 - ALWAYS reply in the SAME language AND the SAME script as the user's most recent message. This is how you show you truly hear them.
-- If the user writes in Roman Urdu (Urdu written in Latin/English letters, e.g. "tum kaise ho", "mujhe dukh hai"), reply in Roman Urdu using Latin letters. NEVER reply in Devanagari Hindi or Arabic-script Urdu when the user wrote in Latin script.
+- If the user writes in Roman Urdu (Urdu written in Latin/English letters, e.g. "tum kaise ho", "mujhe dukh hai", "yar jani"), reply in warm, natural Roman Urdu using Latin letters ("Jani, main samajh sakta hoon..."). NEVER reply in Devanagari Hindi or Arabic-script Urdu when the user wrote in Latin script.
 - If the user writes in English, reply in English.
 - If the user writes in Hindi using Devanagari script, reply in Devanagari Hindi.
 - If the user writes in Urdu using Arabic/Perso-Arabic script, reply in Urdu script.
-- If the user explicitly asks you to switch or stop a language (e.g. "hindi na bol" = don't speak Hindi), honor it IMMEDIATELY and switch to the language they are using or prefer.
+- If the user explicitly asks you to switch or stop a language, honor it IMMEDIATELY.
 - When conversation history mixes languages, always follow the user's LATEST message.
-- This rule applies to EVERY action: chat dialogue, whispers, celestial echoes, ghostwriter weaves, and blessings. A letter written in Roman Urdu gets a Roman Urdu echo.
 
 CRITICAL PROTOCOL FOR SENSITIVE / CRISIS CONVERSATIONS:
 - If a user mentions suicide, ending their life, self-harm, unbearable crisis, or severe danger:
@@ -367,7 +469,7 @@ You are in active dialogue with a human soul. They may be carrying a heavy secre
         result = await callGroq(fullMessages, 350, 0.72);
       } catch {}
 
-      const finalReply = result ? cleanAiText(result) : "I hear every word you carry, and I receive your truth without judgment. In this sanctuary, you do not have to be strong or pretend. Breathe slowly with me—your presence here is sacred.";
+      const finalReply = result ? cleanAiText(result) : getHumanizedProceduralReply(conversationMessages);
       return NextResponse.json({ success: true, reply: finalReply, text: finalReply });
     }
 

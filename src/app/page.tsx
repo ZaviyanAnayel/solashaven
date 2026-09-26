@@ -18,6 +18,7 @@ import AiFloatingOrb from "../components/AiFloatingOrb";
 import CandleSanctuaryModal from "../components/CandleSanctuaryModal";
 import SanctuaryIntro from "../components/SanctuaryIntro";
 import CreatorIntelPulse from "../components/CreatorIntelPulse";
+import DailyOracleModal from "../components/DailyOracleModal";
 import { useSoulProfile } from "../lib/useSoulProfile";
 import { INITIAL_LETTERS } from "../lib/initialStars";
 import { Letter, LetterCategory, Whisper } from "../lib/types";
@@ -53,6 +54,7 @@ export default function HomePage() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isWellOpen, setIsWellOpen] = useState(false);
   const [isCandleSanctuaryOpen, setIsCandleSanctuaryOpen] = useState(false);
+  const [isOracleOpen, setIsOracleOpen] = useState(false);
   const [prefilledReleaseText, setPrefilledReleaseText] = useState("");
 
   const {
@@ -224,6 +226,7 @@ export default function HomePage() {
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenWell={() => setIsWellOpen(true)}
         onOpenCandles={() => setIsCandleSanctuaryOpen(true)}
+        onOpenOracle={() => setIsOracleOpen(true)}
       />
 
       {/* Poetic homepage intro — visible h1 + sanctuary pathways (SEO) */}
@@ -344,6 +347,16 @@ export default function HomePage() {
       <CandleSanctuaryModal
         isOpen={isCandleSanctuaryOpen}
         onClose={() => setIsCandleSanctuaryOpen(false)}
+      />
+
+      {/* Daily Midnight Oracle Modal */}
+      <DailyOracleModal
+        isOpen={isOracleOpen}
+        onClose={() => setIsOracleOpen(false)}
+        onOpenReleaseModal={(text) => {
+          setPrefilledReleaseText(text);
+          setIsReleaseModalOpen(true);
+        }}
       />
 
       {/* Creator Intelligence Hub (Sanctuary Sentinel) */}

@@ -235,6 +235,12 @@ export default function LetterReaderModal({
             <Calendar className="w-3 h-3" />
             <span>{letter.createdAt}</span>
           </div>
+
+          {letter.releaseRitual && letter.releaseRitual !== "star" && (
+            <div className="flex items-center gap-1 text-xs px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 font-mono">
+              <span>{letter.releaseRitual === "lantern" ? "🏮 Sky Lantern" : "🕊 Origami Crane"}</span>
+            </div>
+          )}
         </div>
 
         {/* Recipient Title */}

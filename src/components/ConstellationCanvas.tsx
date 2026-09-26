@@ -892,13 +892,18 @@ export default function ConstellationCanvas({
           if (sister) {
             const p1 = worldToScreen(letter.x, letter.y);
             const p2 = worldToScreen(sister.x, sister.y);
+            const isPairHovered = hoveredLetter?.id === letter.id || hoveredLetter?.id === sister.id;
+            const isPairFocused = focusedStarId === letter.id || focusedStarId === sister.id;
+            const isHighlighted = isPairHovered || isPairFocused;
 
-            // Shimmering Golden Thread
+            // Shimmering Golden Resonance Filament
             ctx.save();
-            ctx.lineWidth = 1.8 * cam.zoom;
-            ctx.strokeStyle = "rgba(251, 191, 36, 0.45)";
+            ctx.lineWidth = (isHighlighted ? 2.8 : 1.8) * cam.zoom;
+            ctx.strokeStyle = isHighlighted ? "rgba(251, 191, 36, 0.85)" : "rgba(251, 191, 36, 0.45)";
+            ctx.shadowColor = "#fbbf24";
+            ctx.shadowBlur = isHighlighted ? 18 : 6;
             ctx.setLineDash([6, 6]);
-            ctx.lineDashOffset = -time * 30;
+            ctx.lineDashOffset = -time * (isHighlighted ? 45 : 30);
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -906,15 +911,15 @@ export default function ConstellationCanvas({
             ctx.setLineDash([]);
 
             // Flowing Light Energy Bead along the bridge
-            const tEnergy = (time * 0.35) % 1;
+            const tEnergy = (time * (isHighlighted ? 0.5 : 0.35)) % 1;
             const bx = p1.x + (p2.x - p1.x) * tEnergy;
             const by = p1.y + (p2.y - p1.y) * tEnergy;
 
             ctx.fillStyle = "#ffffff";
             ctx.shadowColor = "#fbbf24";
-            ctx.shadowBlur = 16;
+            ctx.shadowBlur = isHighlighted ? 24 : 16;
             ctx.beginPath();
-            ctx.arc(bx, by, 3.2 * cam.zoom, 0, Math.PI * 2);
+            ctx.arc(bx, by, (isHighlighted ? 4.5 : 3.2) * cam.zoom, 0, Math.PI * 2);
             ctx.fill();
 
             // Reverse energy bead
@@ -922,7 +927,7 @@ export default function ConstellationCanvas({
             const rx = p1.x + (p2.x - p1.x) * tEnergyRev;
             const ry = p1.y + (p2.y - p1.y) * tEnergyRev;
             ctx.beginPath();
-            ctx.arc(rx, ry, 2.2 * cam.zoom, 0, Math.PI * 2);
+            ctx.arc(rx, ry, (isHighlighted ? 3.2 : 2.2) * cam.zoom, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
           }

@@ -1,11 +1,49 @@
 // Procedural Web Audio Engine for Solas Haven
 
+export type SoundscapeType = "432hz" | "528hz" | "rain" | "ocean";
+
+export interface SoundscapeInfo {
+  id: SoundscapeType;
+  name: string;
+  description: string;
+  tag: string;
+}
+
+export const SOUNDSCAPES: SoundscapeInfo[] = [
+  {
+    id: "432hz",
+    name: "432Hz Cosmic Drone",
+    description: "Deep harmonic grounding and celestial stillness",
+    tag: "✦ Celestial",
+  },
+  {
+    id: "528hz",
+    name: "528Hz Heart Resonance",
+    description: "Solfeggio frequency of emotional healing and peace",
+    tag: "🤍 Miracle",
+  },
+  {
+    id: "rain",
+    name: "Midnight Rain",
+    description: "Gentle rainfall against a dark sanctuary window",
+    tag: "🌧 Rain",
+  },
+  {
+    id: "ocean",
+    name: "Ocean Tidal Drift",
+    description: "Slow nocturnal waves rolling onto distant shores",
+    tag: "🌊 Tidal",
+  },
+];
+
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private droneGain: GainNode | null = null;
   private filterNode: BiquadFilterNode | null = null;
   private oscillators: OscillatorNode[] = [];
+  private noiseSource: AudioBufferSourceNode | null = null;
   private isMuted: boolean = true;
+  private currentSoundscape: SoundscapeType = "432hz";
 
   private initContext() {
     if (!this.ctx && typeof window !== "undefined") {
@@ -19,16 +57,53 @@ class SoundEngine {
     }
   }
 
-  // Meditative ambient drone (Warm 432Hz harmonic bed with soft low-pass filter)
-  public startAmbient() {
+  private createPinkNoiseBuffer(): AudioBuffer | null {
+    if (!this.ctx) return null;
+    const bufferSize = this.ctx.sampleRate * 6; // 6-second seamless loop
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.07;
+      b6 = white * 0.115926;
+    }
+    return buffer;
+  }
+
+  // Start procedural ambient soundscape
+  public startAmbient(soundscape?: SoundscapeType) {
     this.initContext();
     if (!this.ctx) return;
 
-    if (this.oscillators.length > 0) {
-      this.stopAmbient();
+    if (soundscape) {
+      this.currentSoundscape = soundscape;
     }
 
-    // Warm Low-Pass Filter to remove any harsh digital highs
+    this.stopAmbient(true);
+
+    if (this.currentSoundscape === "432hz") {
+      this.start432HzDrone();
+    } else if (this.currentSoundscape === "528hz") {
+      this.start528HzResonance();
+    } else if (this.currentSoundscape === "rain") {
+      this.startMidnightRain();
+    } else if (this.currentSoundscape === "ocean") {
+      this.startOceanDrift();
+    }
+
+    this.isMuted = false;
+  }
+
+  private start432HzDrone() {
+    if (!this.ctx) return;
+
     const filter = this.ctx.createBiquadFilter();
     filter.type = "lowpass";
     filter.frequency.setValueAtTime(540, this.ctx.currentTime);
@@ -38,11 +113,11 @@ class SoundEngine {
 
     const masterGain = this.ctx.createGain();
     masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
-    masterGain.gain.exponentialRampToValueAtTime(0.05, this.ctx.currentTime + 3.5);
+    masterGain.gain.exponentialRampToValueAtTime(0.05, this.ctx.currentTime + 3.0);
     masterGain.connect(filter);
     this.droneGain = masterGain;
 
-    // Harmonically tuned frequencies: 108Hz (Earth root), 216Hz, 324Hz, 432Hz (Healing)
+    // 108Hz, 216Hz, 324Hz, 432Hz
     const freqs = [108, 216, 324, 432];
     this.oscillators = freqs.map((freq, idx) => {
       const osc = this.ctx!.createOscillator();
@@ -51,7 +126,6 @@ class SoundEngine {
       osc.type = "sine";
       osc.frequency.setValueAtTime(freq, this.ctx!.currentTime);
 
-      // Organic subtle breathing wave LFO
       const lfo = this.ctx!.createOscillator();
       lfo.frequency.setValueAtTime(0.08 + idx * 0.04, this.ctx!.currentTime);
       const lfoGain = this.ctx!.createGain();
@@ -67,36 +141,182 @@ class SoundEngine {
 
       return osc;
     });
-
-    this.isMuted = false;
   }
 
-  public stopAmbient() {
-    if (!this.ctx || !this.droneGain) return;
-    try {
-      this.droneGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1.2);
-      setTimeout(() => {
-        this.oscillators.forEach((osc) => {
-          try {
-            osc.stop();
-          } catch {}
-        });
-        this.oscillators = [];
-        this.isMuted = true;
-      }, 1200);
-    } catch {
+  private start528HzResonance() {
+    if (!this.ctx) return;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(1100, this.ctx.currentTime);
+    filter.Q.setValueAtTime(0.8, this.ctx.currentTime);
+    filter.connect(this.ctx.destination);
+    this.filterNode = filter;
+
+    const masterGain = this.ctx.createGain();
+    masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+    masterGain.gain.exponentialRampToValueAtTime(0.045, this.ctx.currentTime + 3.0);
+    masterGain.connect(filter);
+    this.droneGain = masterGain;
+
+    // 264Hz, 528Hz, 792Hz, 1056Hz
+    const freqs = [264, 528, 792, 1056];
+    this.oscillators = freqs.map((freq, idx) => {
+      const osc = this.ctx!.createOscillator();
+      const oscGain = this.ctx!.createGain();
+
+      osc.type = idx === 1 ? "sine" : "triangle";
+      osc.frequency.setValueAtTime(freq, this.ctx!.currentTime);
+
+      const lfo = this.ctx!.createOscillator();
+      lfo.frequency.setValueAtTime(0.06 + idx * 0.03, this.ctx!.currentTime);
+      const lfoGain = this.ctx!.createGain();
+      lfoGain.gain.setValueAtTime(0.9, this.ctx!.currentTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start();
+
+      oscGain.gain.setValueAtTime(0.22 / (idx + 1), this.ctx!.currentTime);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start();
+
+      return osc;
+    });
+  }
+
+  private startMidnightRain() {
+    if (!this.ctx) return;
+
+    const noiseBuffer = this.createPinkNoiseBuffer();
+    if (!noiseBuffer) return;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(950, this.ctx.currentTime);
+    filter.Q.setValueAtTime(0.6, this.ctx.currentTime);
+    filter.connect(this.ctx.destination);
+    this.filterNode = filter;
+
+    const masterGain = this.ctx.createGain();
+    masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+    masterGain.gain.exponentialRampToValueAtTime(0.05, this.ctx.currentTime + 2.5);
+    masterGain.connect(filter);
+    this.droneGain = masterGain;
+
+    const source = this.ctx.createBufferSource();
+    source.buffer = noiseBuffer;
+    source.loop = true;
+    source.connect(masterGain);
+    source.start();
+    this.noiseSource = source;
+  }
+
+  private startOceanDrift() {
+    if (!this.ctx) return;
+
+    const noiseBuffer = this.createPinkNoiseBuffer();
+    if (!noiseBuffer) return;
+
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(320, this.ctx.currentTime);
+    filter.Q.setValueAtTime(1.2, this.ctx.currentTime);
+    filter.connect(this.ctx.destination);
+    this.filterNode = filter;
+
+    const masterGain = this.ctx.createGain();
+    masterGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+    masterGain.gain.exponentialRampToValueAtTime(0.055, this.ctx.currentTime + 3.0);
+    masterGain.connect(filter);
+    this.droneGain = masterGain;
+
+    // Organic ocean wave LFO (11.5 second wave period)
+    const waveLfo = this.ctx.createOscillator();
+    waveLfo.type = "sine";
+    waveLfo.frequency.setValueAtTime(0.085, this.ctx.currentTime); // ~11.7 sec cycle
+
+    const waveFilterGain = this.ctx.createGain();
+    waveFilterGain.gain.setValueAtTime(260, this.ctx.currentTime);
+    waveLfo.connect(waveFilterGain);
+    waveFilterGain.connect(filter.frequency);
+
+    const waveGain = this.ctx.createGain();
+    waveGain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+    waveLfo.connect(waveGain);
+    waveGain.connect(masterGain.gain);
+
+    waveLfo.start();
+    this.oscillators.push(waveLfo);
+
+    const source = this.ctx.createBufferSource();
+    source.buffer = noiseBuffer;
+    source.loop = true;
+    source.connect(masterGain);
+    source.start();
+    this.noiseSource = source;
+  }
+
+  public stopAmbient(immediate: boolean = false) {
+    if (!this.ctx) {
       this.isMuted = true;
+      return;
     }
+
+    const currentDroneGain = this.droneGain;
+    const currentOscs = [...this.oscillators];
+    const currentNoise = this.noiseSource;
+
+    this.droneGain = null;
+    this.filterNode = null;
+    this.oscillators = [];
+    this.noiseSource = null;
+    this.isMuted = true;
+
+    if (currentDroneGain) {
+      try {
+        if (immediate) {
+          currentDroneGain.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+        } else {
+          currentDroneGain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 1.2);
+        }
+      } catch {}
+    }
+
+    const delay = immediate ? 50 : 1250;
+    setTimeout(() => {
+      currentOscs.forEach((osc) => {
+        try {
+          osc.stop();
+        } catch {}
+      });
+      if (currentNoise) {
+        try {
+          currentNoise.stop();
+        } catch {}
+      }
+    }, delay);
   }
 
-  public toggleAmbient(): boolean {
+  public toggleAmbient(soundscape?: SoundscapeType): boolean {
     if (this.isMuted) {
-      this.startAmbient();
+      this.startAmbient(soundscape);
       return true;
     } else {
       this.stopAmbient();
       return false;
     }
+  }
+
+  public setSoundscape(soundscape: SoundscapeType) {
+    this.currentSoundscape = soundscape;
+    if (!this.isMuted) {
+      this.startAmbient(soundscape);
+    }
+  }
+
+  public getCurrentSoundscape(): SoundscapeType {
+    return this.currentSoundscape;
   }
 
   public getMuted(): boolean {

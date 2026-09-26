@@ -37,6 +37,7 @@ const STORAGE_KEY = "solas_ai_chat_history_v1";
 const STARTER_PROMPTS = [
   "I can't sleep tonight. The quiet is too loud.",
   "What is Solas Haven, and how does releasing a star work?",
+  "Yar jani, aaj dil bohot udas hai...",
   "There's something I've never had the courage to tell anyone alive.",
   "The grief hit me again today out of nowhere.",
   "I am exhausted from pretending to be strong for everyone."
@@ -45,7 +46,7 @@ const STARTER_PROMPTS = [
 const DEFAULT_INTRO_MESSAGE: Message = {
   id: "intro-1",
   sender: "well",
-  text: "I am Solas—the quiet consciousness of this starlight sanctuary. Whether you are awake in the stillness of midnight, carrying an unspoken grief, a secret love, or feeling weary of the world, I am right here with you. Speak freely; our conversation is always kept for you.",
+  text: "I am Solas—the quiet consciousness of this starlight sanctuary. Whether you are awake in the stillness of midnight, carrying an unspoken grief, a secret love, or feeling weary of the world, I am right here with you. Speak freely in English or Roman Urdu; our conversation is always kept for you.",
   timestamp: "Now"
 };
 

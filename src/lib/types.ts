@@ -7,6 +7,8 @@ export interface Whisper {
   locationName?: string;
 }
 
+export type ReleaseRitual = "star" | "lantern" | "crane";
+
 export interface Letter {
   id: string;
   recipient: string;
@@ -19,6 +21,7 @@ export interface Letter {
   language?: string;
   resonantLetterId?: string;
   resonanceNote?: string;
+  releaseRitual?: ReleaseRitual;
   isTimeCapsule?: boolean;
   igniteDate?: string;
   x: number;

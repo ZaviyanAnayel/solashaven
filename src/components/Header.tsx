@@ -28,6 +28,7 @@ import {
 import { filterRegions, EarthRegion } from "../lib/countries";
 import { useSoulProfile, CELESTIAL_AVATARS } from "../lib/useSoulProfile";
 import GlobalPulse from "./GlobalPulse";
+import { soundEngine, SOUNDSCAPES, SoundscapeType } from "../lib/audio";
 
 interface HeaderProps {
   selectedCategory: LetterCategory | "all";
@@ -47,6 +48,7 @@ interface HeaderProps {
   onOpenProfile?: () => void;
   onOpenWell?: () => void;
   onOpenCandles?: () => void;
+  onOpenOracle?: () => void;
 }
 
 export default function Header({
@@ -67,15 +69,27 @@ export default function Header({
   onOpenProfile,
   onOpenWell,
   onOpenCandles,
+  onOpenOracle,
 }: HeaderProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSoundMenuOpen, setIsSoundMenuOpen] = useState(false);
+  const [selectedSoundscape, setSelectedSoundscape] = useState<SoundscapeType>("432hz");
   const [localCountry, setLocalCountry] = useState<string>("");
   const { profile } = useSoulProfile();
   const currentAvatar =
     CELESTIAL_AVATARS.find((a) => a.id === profile.avatarId) || CELESTIAL_AVATARS[0];
   const matchingRegions = filterRegions(searchLocation, 12);
+
+  const handleSelectSoundscape = (s: SoundscapeType) => {
+    setSelectedSoundscape(s);
+    soundEngine.setSoundscape(s);
+    setIsSoundMenuOpen(false);
+    if (!isAudioPlaying) {
+      onToggleAudio();
+    }
+  };
 
   // Dynamically detect the visitor's own country or region so it's customized for EVERY user worldwide
   useEffect(() => {
@@ -249,6 +263,18 @@ export default function Header({
                 </button>
               )}
 
+              {onOpenOracle && (
+                <button
+                  type="button"
+                  onClick={onOpenOracle}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-amber-200/90 hover:text-white hover:bg-amber-400/15 transition-all whitespace-nowrap cursor-pointer"
+                  title="Daily Midnight Oracle — Draw Today's Cosmic Affirmation"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Oracle</span>
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={onWander}
@@ -305,6 +331,18 @@ export default function Header({
                 <Landmark className="w-3.5 h-3.5 text-amber-300" />
                 <span>Museum</span>
               </Link>
+
+              {onOpenOracle && (
+                <button
+                  type="button"
+                  onClick={onOpenOracle}
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 transition-all whitespace-nowrap cursor-pointer"
+                  title="Daily Midnight Oracle"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Oracle</span>
+                </button>
+              )}
             </nav>
           </div>
 
@@ -324,22 +362,87 @@ export default function Header({
               <Globe2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
 
-            {/* Sound Toggle */}
-            <button
-              onClick={onToggleAudio}
-              title={isAudioPlaying ? "Mute ambient audio" : "Play 432Hz ambient frequency"}
-              className={`p-1.5 sm:p-2 rounded-full border transition-all duration-300 backdrop-blur-xl cursor-pointer ${
-                isAudioPlaying
-                  ? "bg-amber-500/20 border-amber-400/50 text-amber-300 shadow-md shadow-amber-500/20"
-                  : "bg-white/5 border-white/10 text-white/60 hover:text-white hover:bg-white/10"
-              }`}
-            >
-              {isAudioPlaying ? (
-                <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
-              ) : (
-                <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            {/* Sound Toggle & Soundscape Selector */}
+            <div className="relative">
+              <div
+                className={`flex items-center rounded-full border transition-all duration-300 backdrop-blur-xl ${
+                  isAudioPlaying
+                    ? "bg-amber-500/20 border-amber-400/50 text-amber-300 shadow-md shadow-amber-500/20"
+                    : "bg-white/5 border-white/10 text-white/60 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={onToggleAudio}
+                  title={
+                    isAudioPlaying
+                      ? `Playing ${SOUNDSCAPES.find((s) => s.id === selectedSoundscape)?.name || "Soundscape"} (Click to mute)`
+                      : "Play ambient soundscape"
+                  }
+                  className="p-1.5 sm:p-2 cursor-pointer transition-colors"
+                >
+                  {isAudioPlaying ? (
+                    <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+                  ) : (
+                    <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsSoundMenuOpen(!isSoundMenuOpen)}
+                  title="Choose Sanctuary Soundscape (432Hz, 528Hz, Rain, Ocean)"
+                  className="pr-2 pl-0.5 py-1.5 sm:py-2 text-white/50 hover:text-amber-300 transition-colors cursor-pointer"
+                >
+                  <ChevronDown
+                    className={`w-3 h-3 transition-transform ${isSoundMenuOpen ? "rotate-180 text-amber-300" : ""}`}
+                  />
+                </button>
+              </div>
+
+              {/* Soundscape Dropdown Card */}
+              {isSoundMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl bg-[#090b14]/95 border border-amber-400/30 p-2.5 shadow-2xl backdrop-blur-2xl z-50 flex flex-col gap-1 animate-fade-in">
+                  <div className="px-2 py-1 flex items-center justify-between border-b border-white/10 pb-1.5 mb-1">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-amber-300/80">
+                      Sanctuary Soundscapes
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsSoundMenuOpen(false)}
+                      className="text-white/40 hover:text-white p-0.5 cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                  {SOUNDSCAPES.map((s) => {
+                    const isSelected = selectedSoundscape === s.id;
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        onClick={() => handleSelectSoundscape(s.id)}
+                        className={`w-full p-2 rounded-xl text-left transition-all flex items-start gap-2.5 cursor-pointer ${
+                          isSelected
+                            ? "bg-amber-400/20 border border-amber-400/40 text-white"
+                            : "hover:bg-white/5 border border-transparent text-white/70 hover:text-white"
+                        }`}
+                      >
+                        <span className="text-sm mt-0.5 shrink-0">{s.tag.split(" ")[0]}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-medium text-white/95 truncate">{s.name}</span>
+                            {isSelected && isAudioPlaying && (
+                              <span className="text-[9px] font-mono text-amber-300 uppercase shrink-0">Playing</span>
+                            )}
+                          </div>
+                          <p className="text-[10px] text-white/45 truncate leading-tight mt-0.5">{s.description}</p>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
               )}
-            </button>
+            </div>
 
             {/* User Stars Locator (Desktop only, accessible in drawer) */}
             {userStarsCount > 0 && (
@@ -817,6 +920,64 @@ export default function Header({
                   <ChevronRight className="w-4 h-4 text-white/40" />
                 </button>
               )}
+
+              {onOpenOracle && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenOracle();
+                  }}
+                  className="flex items-center justify-between p-3 rounded-xl bg-amber-400/[0.08] hover:bg-amber-400/[0.15] border border-amber-400/25 text-amber-200 text-sm font-medium transition-all text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-400/20 flex items-center justify-center text-amber-300">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span>Daily Midnight Oracle</span>
+                        <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-400/20 text-amber-300">New</span>
+                      </div>
+                      <div className="text-[10px] text-amber-200/60">Draw your daily starlight affirmation</div>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-amber-300/60" />
+                </button>
+              )}
+
+              {/* Soundscape presets in mobile drawer */}
+              <div className="mt-2 p-3 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300/80">
+                    Sanctuary Soundscapes
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onToggleAudio}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-amber-400/30 text-amber-200 cursor-pointer"
+                  >
+                    {isAudioPlaying ? "Mute" : "Play"}
+                  </button>
+                </div>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {SOUNDSCAPES.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => handleSelectSoundscape(s.id)}
+                      className={`p-2 rounded-xl text-left border text-xs transition-all cursor-pointer ${
+                        selectedSoundscape === s.id && isAudioPlaying
+                          ? "bg-amber-400/20 border-amber-400/50 text-white font-medium shadow-sm shadow-amber-500/20"
+                          : "bg-white/[0.02] border-white/5 text-white/60 hover:text-white"
+                      }`}
+                    >
+                      <div className="text-sm mb-0.5">{s.tag.split(" ")[0]}</div>
+                      <div className="truncate font-medium text-[11px]">{s.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
 
               <button
                 type="button"
