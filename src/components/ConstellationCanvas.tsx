@@ -330,9 +330,17 @@ export default function ConstellationCanvas({
       setZoomPercent(pct);
     };
 
+    const onNativeTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault(); // Prevents browser viewport/HTML zoom so ONLY cosmos dashboard zooms
+      }
+    };
+
     canvas.addEventListener("wheel", onNativeWheel, { passive: false });
+    canvas.addEventListener("touchmove", onNativeTouchMove, { passive: false });
     return () => {
       canvas.removeEventListener("wheel", onNativeWheel);
+      canvas.removeEventListener("touchmove", onNativeTouchMove);
     };
   }, []);
 
@@ -406,8 +414,11 @@ export default function ConstellationCanvas({
       const currDist = Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY);
       if (touchStartDistRef.current > 0) {
         const ratio = currDist / touchStartDistRef.current;
-        const newZoom = Math.min(Math.max(touchInitialZoomRef.current * ratio, 0.4), 3.0);
+        const newZoom = Math.min(Math.max(touchInitialZoomRef.current * ratio, 0.35), 3.5);
         cameraRef.current.zoom = newZoom;
+        const pct = Math.round(newZoom * 100);
+        zoomPercentRef.current = pct;
+        setZoomPercent(pct);
       }
     }
   };
@@ -1236,45 +1247,50 @@ export default function ConstellationCanvas({
       )}
 
       {/* Bottom Subtle Navigation & Compliance */}
-      <footer className="absolute bottom-2 sm:bottom-3 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 sm:gap-1.5 pointer-events-auto z-10 w-full px-4">
+      <footer className="absolute bottom-2.5 sm:bottom-3.5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 sm:gap-2 pointer-events-auto z-10 w-full max-w-3xl px-4 text-center">
         {/* Mobile Minimal Touch Gesture Hint */}
-        <span className="sm:hidden pointer-events-none text-center text-[10px] tracking-widest text-white/30 font-mono">
+        <span className="sm:hidden pointer-events-none text-center text-[10px] tracking-widest text-white/35 font-mono">
           DRAG SKY • PINCH ZOOM • TAP STAR
         </span>
 
         {/* Desktop Detailed Hint */}
-        <span className="hidden sm:inline pointer-events-none text-center text-[11px] tracking-wider text-white/30 font-light">
+        <span className="hidden sm:inline-block pointer-events-none text-center text-[11px] tracking-wider text-white/35 font-light">
           DRAG TO EXPLORE COSMOS • SCROLL TO ZOOM • CLICK ANY STAR TO READ
         </span>
-        <div className="hidden sm:flex items-center gap-2 sm:gap-3 text-[10px] text-white/30 font-mono tracking-widest uppercase">
-          <a href="/about" className="hover:text-amber-300 transition-colors">
+
+        {/* Quiet Sanctuary Pathways (Cleanly wrapped and spaced so names never collide) */}
+        <nav
+          aria-label="Sanctuary pathways"
+          className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[10px] sm:text-[11px] text-white/40 font-mono tracking-widest uppercase max-w-2xl"
+        >
+          <a href="/about" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             About
           </a>
-          <span>•</span>
-          <a href="/chronicles" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/chronicles" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             Chronicles
           </a>
-          <span>•</span>
-          <a href="/library" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/library" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             Library
           </a>
-          <span>•</span>
-          <a href="/faq" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/faq" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             FAQ
           </a>
-          <span>•</span>
-          <a href="/privacy" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/privacy" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             Privacy
           </a>
-          <span>•</span>
-          <a href="/terms" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/terms" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             Terms
           </a>
-          <span>•</span>
-          <a href="/contact" className="hover:text-amber-300 transition-colors">
+          <span className="text-white/20 select-none">•</span>
+          <a href="/contact" className="hover:text-amber-300 transition-colors whitespace-nowrap">
             Contact
           </a>
-        </div>
+        </nav>
       </footer>
     </div>
   );

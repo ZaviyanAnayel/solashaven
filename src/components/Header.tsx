@@ -186,10 +186,10 @@ export default function Header({
             </div>
           </div>
 
-          {/* Center Navigation: Responsive & Collision-Free (Never Overlaps) */}
-          <div className="hidden xl:flex items-center justify-center shrink-0">
+          {/* Center Navigation: Shown only on ultra-wide screens (>= 2xl) where there is ample room, hidden on zoomed screens so buttons never collide */}
+          <div className="hidden 2xl:flex items-center justify-center shrink-0">
             {/* Full Expanded Nav on Ultra-wide (2xl >= 1536px) */}
-            <nav className="hidden 2xl:flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-2xl shadow-lg shadow-black/40">
+            <nav className="flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-2xl shadow-lg shadow-black/40">
               <Link
                 href="/chronicles"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
@@ -291,58 +291,6 @@ export default function Header({
               >
                 About
               </Link>
-            </nav>
-
-            {/* Compact Nav on Standard Widescreen / Zoomed Screens (1280px to 1535px) */}
-            <nav className="flex 2xl:hidden items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-2xl shadow-lg shadow-black/40">
-              <Link
-                href="/chronicles"
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
-              >
-                <BookOpen className="w-3.5 h-3.5 text-amber-300" />
-                <span>Chronicles</span>
-              </Link>
-
-              <Link
-                href="/library"
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-white/80 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
-              >
-                <Bookmark className="w-3.5 h-3.5 text-amber-400" />
-                <span>Library</span>
-              </Link>
-
-              <button
-                type="button"
-                onClick={() => {
-                  if (onOpenCandles) onOpenCandles();
-                  else window.location.href = "/candle";
-                }}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 border border-amber-400/25 hover:border-amber-300/60 shadow-sm shadow-amber-500/10 transition-all whitespace-nowrap cursor-pointer"
-                title="Light a Candle — Kindle Solace in the Sacred Stillness"
-              >
-                <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30 animate-pulse" />
-                <span>Light a Candle</span>
-              </button>
-
-              <Link
-                href="/museum"
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-white/10 transition-all whitespace-nowrap"
-              >
-                <Landmark className="w-3.5 h-3.5 text-amber-300" />
-                <span>Museum</span>
-              </Link>
-
-              {onOpenOracle && (
-                <button
-                  type="button"
-                  onClick={onOpenOracle}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium text-amber-200 hover:text-white hover:bg-amber-400/15 transition-all whitespace-nowrap cursor-pointer"
-                  title="Daily Midnight Oracle"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>Oracle</span>
-                </button>
-              )}
             </nav>
           </div>
 
@@ -667,11 +615,11 @@ export default function Header({
       {isMobileMenuOpen && (
         <div
           onClick={() => setIsMobileMenuOpen(false)}
-          className="fixed inset-0 z-50 pointer-events-auto flex justify-end bg-black/80 backdrop-blur-xl animate-fade-in"
+          className="fixed inset-0 z-50 pointer-events-auto flex justify-end bg-black/25 backdrop-blur-[2px] transition-all duration-300 animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-sm h-full bg-[#07080f]/95 border-l border-white/10 p-5 sm:p-6 flex flex-col shadow-2xl overflow-y-auto"
+            className="w-full max-w-sm h-full bg-[#07080f]/95 border-l border-amber-400/20 p-5 sm:p-6 flex flex-col shadow-2xl shadow-black/90 overflow-y-auto backdrop-blur-2xl"
           >
             {/* Drawer Top Bar */}
             <div className="flex items-center justify-between pb-4 border-b border-white/10">
