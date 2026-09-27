@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s | Solas Haven",
   },
   description:
-    "Solas Haven is a sacred, anonymous digital cosmos where unspoken grief, unsaid goodbyes, secret confessions, and silent prayers ascend into permanent starlight across 195+ nations.",
+    "Solas Haven is a sacred, anonymous digital cosmos where unspoken grief, unsaid goodbyes, secret confessions, and silent prayers ascend into permanent starlight.",
   applicationName: "Solas Haven",
   keywords: [
     // Brand & Identity
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Solas Haven | The Celestial Sanctuary of Unspoken Words & Silent Prayers",
     description:
-      "Where unspoken grief, unsaid goodbyes, and silent prayers become permanent stars in a living 3D cosmos across 195+ nations.",
+      "Where unspoken grief, unsaid goodbyes, and silent prayers become permanent stars in a living 3D cosmos.",
     url: "https://www.solashaven.com",
     siteName: "Solas Haven",
     locale: "en_US",

@@ -225,13 +225,13 @@ export default function ChroniclesPage() {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-mono mb-4">
             <BookOpen className="w-3.5 h-3.5" />
-            <span>52+ AUTHENTIC MEMOIRS, TRUE STORIES & SACRED REFLECTIONS</span>
+            <span>52 SACRED REFLECTIONS & ESSAYS</span>
           </div>
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-medium tracking-tight text-white/95 mb-4 max-w-3xl mx-auto leading-tight">
             The Living Chronicles
           </h1>
           <p className="text-sm sm:text-base text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-            Real human memoirs from souls across Kyoto, Seattle, Florence, New York, and Edinburgh. Unburdened secrets, enduring love, and quiet prayers recorded for eternity.
+            Editorial reflections on grief, love, forgiveness, and silent prayer — written by the Solas Haven team as companions for the night.
           </p>
         </div>
 

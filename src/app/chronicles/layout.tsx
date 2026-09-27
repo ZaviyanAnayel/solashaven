@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Chronicles of Light & Memory | Solas Haven",
   description:
-    "Explore deeply moving true human reflections on grief, unrequited love, forgiveness, and silent prayers written to eternity across 195+ nations.",
+    "Explore deeply moving reflections on grief, unrequited love, forgiveness, and silent prayers — editorial essays written by the Solas Haven team.",
   keywords: [
     "grief stories",
     "unspoken love chronicles",
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Chronicles of Light & Memory | Solas Haven",
     description:
-      "A sacred sanctuary archive of true human letters, grief reflections, and silent prayers across 195+ nations.",
+      "A sacred sanctuary archive of reflections, grief essays, and silent prayers from the Solas Haven editorial team.",
     url: "https://www.solashaven.com/chronicles",
     siteName: "Solas Haven",
     type: "website",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Chronicles of Light & Memory | Solas Haven",
     description:
-      "A sacred sanctuary archive of true human letters, grief reflections, and silent prayers across 195+ nations.",
+      "A sacred sanctuary archive of reflections, grief essays, and silent prayers from the Solas Haven editorial team.",
   },
 };
 

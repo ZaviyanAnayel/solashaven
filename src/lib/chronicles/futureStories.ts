@@ -10,7 +10,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&auto=format&fit=crop&q=80",
-    author: "Chloe Adams • Bristol, UK",
+    author: "Solas Haven Editorial",
     tags: ["Hope", "Future Self", "Depression Recovery", "Letter to Self"],
     sections: [
       {
@@ -47,7 +47,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1200&auto=format&fit=crop&q=80",
-    author: "Lars Nygård • Stockholm, Sweden",
+    author: "Solas Haven Editorial",
     tags: ["Silence", "Sweden", "Mindfulness", "Rebirth"],
     sections: [
       {
@@ -85,7 +85,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1200&auto=format&fit=crop&q=80",
-    author: "Mei Chen-Tanaka • Kyoto, Japan",
+    author: "Solas Haven Editorial",
     tags: ["Infertility", "Motherhood", "Kyoto", "Hope"],
     sections: [
       {
@@ -123,7 +123,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=80",
-    author: "Sebastian Meier • Valais, Switzerland",
+    author: "Solas Haven Editorial",
     tags: ["Burnout", "Switzerland", "Simplicity", "Reinvention"],
     sections: [
       {
@@ -161,7 +161,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&auto=format&fit=crop&q=80",
-    author: "Claire Beaumont • Marseilles, France",
+    author: "Solas Haven Editorial",
     tags: ["Rebirth", "Marseilles", "Divorce", "Midlife Freedom"],
     sections: [
       {
@@ -198,7 +198,7 @@ export const FUTURE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Hope & Horizons",
     coverImage: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=1200&auto=format&fit=crop&q=80",
-    author: "Lucas Silva • San Francisco, California",
+    author: "Solas Haven Editorial",
     tags: ["Cancer", "Remission", "Stem Cell", "Gratitude"],
     sections: [
       {

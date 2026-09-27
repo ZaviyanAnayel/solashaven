@@ -15,7 +15,7 @@ export default function SanctuaryIntro() {
         <p className="mt-2 max-w-xl font-serif text-sm sm:text-base text-white/55 leading-relaxed">
           The celestial sanctuary of unspoken words &amp; silent prayers —
           release grief, unsaid goodbyes and secret confessions as stars
-          into a living cosmos shared across 195+ nations.
+          into a living cosmos shared with souls around the world.
         </p>
       </div>
     </>

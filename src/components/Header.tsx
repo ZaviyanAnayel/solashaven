@@ -27,7 +27,6 @@ import {
 } from "lucide-react";
 import { filterRegions, EarthRegion } from "../lib/countries";
 import { useSoulProfile, CELESTIAL_AVATARS } from "../lib/useSoulProfile";
-import GlobalPulse from "./GlobalPulse";
 import { soundEngine, SOUNDSCAPES, SoundscapeType } from "../lib/audio";
 
 interface HeaderProps {
@@ -606,9 +605,6 @@ export default function Header({
             })}
           </div>
         </div>
-
-        {/* Global Pulse Ticker (Flows naturally right below category pills with ZERO collision) */}
-        <GlobalPulse />
       </div>
 
       {/* Mobile Sanctuary Drawer (Full Touch-Screen Navigation) */}
@@ -739,7 +735,7 @@ export default function Header({
                   </div>
                   <div>
                     <div>The Living Chronicles</div>
-                    <div className="text-[10px] text-white/40">52+ authentic human memoirs</div>
+                    <div className="text-[10px] text-white/40">sacred reflections & essays</div>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-white/40" />

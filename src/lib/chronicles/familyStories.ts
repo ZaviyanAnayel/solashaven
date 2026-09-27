@@ -10,7 +10,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&auto=format&fit=crop&q=80",
-    author: "Amina Yusuf • London, UK",
+    author: "Solas Haven Editorial",
     tags: ["Father", "London", "Immigrant Sacrifice", "Oxford"],
     sections: [
       {
@@ -47,7 +47,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=80",
-    author: "Raymond Lam • Vancouver, Canada",
+    author: "Solas Haven Editorial",
     tags: ["Mother", "Vancouver", "Immigrant", "Suitcase"],
     sections: [
       {
@@ -84,7 +84,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=1200&auto=format&fit=crop&q=80",
-    author: "Nikos Kazantzakis • Athens, Greece",
+    author: "Solas Haven Editorial",
     tags: ["Brother", "Greece", "Aegean", "Youth"],
     sections: [
       {
@@ -122,7 +122,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&auto=format&fit=crop&q=80",
-    author: "Gianluca De Luca • Rome, Italy",
+    author: "Solas Haven Editorial",
     tags: ["Nonna", "Rome", "Polenta", "Italian Family"],
     sections: [
       {
@@ -159,7 +159,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=1200&auto=format&fit=crop&q=80",
-    author: "Sean Gallagher • Dublin, Ireland",
+    author: "Solas Haven Editorial",
     tags: ["Father", "Dublin", "Marriage", "Memories"],
     sections: [
       {
@@ -197,7 +197,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=80",
-    author: "Dr. Elena Vance • Chicago, Illinois",
+    author: "Solas Haven Editorial",
     tags: ["Father", "Chicago", "Medical School", "Sacrifice"],
     sections: [
       {
@@ -235,7 +235,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1200&auto=format&fit=crop&q=80",
-    author: "Maria Santos • Manila / Dubai",
+    author: "Solas Haven Editorial",
     tags: ["Motherhood", "OFW", "Philippines", "Distance"],
     sections: [
       {
@@ -273,7 +273,7 @@ export const FAMILY_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Family & Roots",
     coverImage: "https://images.unsplash.com/photo-1514306191717-452ec28c7814?w=1200&auto=format&fit=crop&q=80",
-    author: "Franziska Weber • Vienna, Austria",
+    author: "Solas Haven Editorial",
     tags: ["Violin", "Vienna", "Grandfather", "Heritage"],
     sections: [
       {

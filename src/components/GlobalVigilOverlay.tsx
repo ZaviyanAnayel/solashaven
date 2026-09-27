@@ -18,16 +18,17 @@ export default function GlobalVigilOverlay({
   const [isHolding, setIsHolding] = useState(false);
   const [progress, setProgress] = useState(0); // 0 to 100
   const [hasCompleted, setHasCompleted] = useState(false);
-  const [liveSoulsCount, setLiveSoulsCount] = useState(3418);
+  // Honest counter: real vigils THIS soul has held (localStorage). Never fake live users.
+  const [vigilsHeld, setVigilsHeld] = useState(0);
 
   const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Live active souls fluctuating realistically
+  // Load this soul's real vigil count
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLiveSoulsCount((prev) => prev + (Math.floor(Math.random() * 5) - 2));
-    }, 4000);
-    return () => clearInterval(interval);
+    try {
+      const n = parseInt(localStorage.getItem("solashaven-vigils-held") || "0", 10);
+      if (!isNaN(n) && n > 0) setVigilsHeld(n);
+    } catch {}
   }, []);
 
   // Update canvas progress
@@ -58,6 +59,13 @@ export default function GlobalVigilOverlay({
         if (prev >= 100) {
           if (holdIntervalRef.current) clearInterval(holdIntervalRef.current);
           setHasCompleted(true);
+          setVigilsHeld((c) => {
+            const next = c + 1;
+            try {
+              localStorage.setItem("solashaven-vigils-held", String(next));
+            } catch {}
+            return next;
+          });
           soundEngine.playVigilHarmonic(1.5);
           soundEngine.playPrayerAscensionChime();
           return 100;
@@ -177,15 +185,17 @@ export default function GlobalVigilOverlay({
           </span>
         </div>
 
-        {/* Live Souls Pulse Counter */}
+        {/* Vigil Counter — honest: this soul's own held vigils */}
         <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-between text-xs text-white/70 font-mono">
           <span className="flex items-center gap-1.5 text-amber-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <span className="w-2 h-2 rounded-full bg-amber-400/80" />
             <Globe className="w-3.5 h-3.5" />
-            <span>Earth Vigil</span>
+            <span>Sacred Vigil</span>
           </span>
           <span className="text-white/90 font-semibold">
-            {liveSoulsCount.toLocaleString()} souls sitting in silence
+            {vigilsHeld === 0
+              ? "Your first vigil awaits"
+              : `${vigilsHeld} silent vigil${vigilsHeld === 1 ? "" : "s"} held by you`}
           </span>
         </div>
 

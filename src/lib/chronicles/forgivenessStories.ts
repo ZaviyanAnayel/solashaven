@@ -10,7 +10,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Emotional Science",
     coverImage: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=1200&auto=format&fit=crop&q=80",
-    author: "Editorial Desk • Zaviyan",
+    author: "Solas Haven Editorial",
     tags: ["Catharsis", "Neurobiology", "Pennebaker", "Healing"],
     sections: [
       {
@@ -50,7 +50,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?w=1200&auto=format&fit=crop&q=80",
-    author: "Daniel Wu • Toronto, Canada",
+    author: "Solas Haven Editorial",
     tags: ["Father", "Toronto", "Regret", "Reconciliation"],
     sections: [
       {
@@ -90,7 +90,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=1200&auto=format&fit=crop&q=80",
-    author: "Darius Hayes • Detroit, Michigan",
+    author: "Solas Haven Editorial",
     tags: ["Betrayal", "Detroit", "Anger", "Freedom"],
     sections: [
       {
@@ -128,7 +128,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1200&auto=format&fit=crop&q=80",
-    author: "Brian Torres • Brooklyn, New York",
+    author: "Solas Haven Editorial",
     tags: ["Brooklyn", "Mother", "Grace", "Childhood Guilt"],
     sections: [
       {
@@ -166,7 +166,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=1200&auto=format&fit=crop&q=80",
-    author: "Callum Evans • Melbourne, Australia",
+    author: "Solas Haven Editorial",
     tags: ["Bullying", "Melbourne", "Healing", "Generational Trauma"],
     sections: [
       {
@@ -204,7 +204,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=1200&auto=format&fit=crop&q=80",
-    author: "Astrid Lindholm • Oslo, Norway",
+    author: "Solas Haven Editorial",
     tags: ["Oslo", "Siblings", "Inheritance", "Reconciliation"],
     sections: [
       {
@@ -241,7 +241,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=1200&auto=format&fit=crop&q=80",
-    author: "Sarah Jenkins • London, UK",
+    author: "Solas Haven Editorial",
     tags: ["Sobriety", "Self-Forgiveness", "Addiction", "London"],
     sections: [
       {
@@ -279,7 +279,7 @@ export const FORGIVENESS_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Forgiveness & Reconciliation",
     coverImage: "https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=1200&auto=format&fit=crop&q=80",
-    author: "Helga Eiriksdottir • Akureyri, Iceland",
+    author: "Solas Haven Editorial",
     tags: ["Iceland", "Motherhood", "Generational Healing", "Catharsis"],
     sections: [
       {

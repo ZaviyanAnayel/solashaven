@@ -706,7 +706,7 @@ function getHumanizedProceduralReply(messages: Array<{ role: string; content: st
     if (lang === "arabic") {
       return "هدوء منتصف الليل قد يجعل الشعور بالوحدة ثقيلاً جداً. عندما ينام العالم وتبقى بمفردك مع أفكارك، قد يبدو الحمل فوق طاقتك. لكنك لست وحدك؛ الآلاف تحت هذه السماء يشاركونك نفس السكون الليلة. خذ نفساً عميقاً معي، أنت هنا في أمان.";
     }
-    return "The quiet of midnight can make loneliness feel deafening. When the world falls asleep and leaves you alone with your thoughts, the weight can feel unbearable. But you are not alone under this sky. Thousands of gentle souls across this earth are looking up at these same stars tonight, sharing this exact human stillness. Take a slow, grounding breath with me—you are held here.";
+    return "The quiet of midnight can make loneliness feel deafening. When the world falls asleep and leaves you alone with your thoughts, the weight can feel unbearable. But you are not alone under this sky. Gentle souls across this earth are looking up at these same stars tonight, sharing this exact human stillness. Take a slow, grounding breath with me—you are held here.";
   }
 
   // 13. A-to-Z Complete Sanctuary Overview & Guide
@@ -868,7 +868,7 @@ A TO Z COMPLETE KNOWLEDGE OF SOLAS HAVEN:
    - Letters locked in the sky set to ignite on a future milestone date (1 month, 6 months, 1 year). They remain as glowing blue/white hourglasses in the constellation until their appointed day arrives, then erupt into glorious starlight.
 
 7. READING STARS, SENDING LIGHT & ANONYMOUS WHISPERS:
-   - Click any glowing star in the sky to open and read letters released from people across 195+ countries.
+   - Click any glowing star in the sky to open and read letters released from souls around the world.
    - Click "Send Light" (🤍) to send warmth and increase the star's illumination.
    - Leave an anonymous "Whisper" of comfort or prayer to support the author.
 

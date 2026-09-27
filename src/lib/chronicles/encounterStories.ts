@@ -10,7 +10,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1517824806704-9040b037703b?w=1200&auto=format&fit=crop&q=80",
-    author: "Kasia Nowak • Warsaw, Poland",
+    author: "Solas Haven Editorial",
     tags: ["Warsaw", "Kindness", "Night Bus", "Protection"],
     sections: [
       {
@@ -49,7 +49,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?w=1200&auto=format&fit=crop&q=80",
-    author: "Christopher Vance • Chicago, Illinois",
+    author: "Solas Haven Editorial",
     tags: ["Chicago", "Laundromat", "Wisdom", "Marriage"],
     sections: [
       {
@@ -87,7 +87,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=80",
-    author: "Dr. Nathan Miller • Charlottesville, Virginia",
+    author: "Solas Haven Editorial",
     tags: ["Virginia", "Blue Ridge", "Compassion", "Kindness"],
     sections: [
       {
@@ -126,7 +126,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?w=1200&auto=format&fit=crop&q=80",
-    author: "Mathieu Laurent • Paris, France",
+    author: "Solas Haven Editorial",
     tags: ["Paris", "Chatelet", "Bach", "Subway Music"],
     sections: [
       {
@@ -164,7 +164,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&auto=format&fit=crop&q=80",
-    author: "Nurse Kathleen O'Brien • Boston, Massachusetts",
+    author: "Solas Haven Editorial",
     tags: ["Nursing", "ICU", "Compassion", "End of Life"],
     sections: [
       {
@@ -203,7 +203,7 @@ export const ENCOUNTER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Everyday Angels",
     coverImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&auto=format&fit=crop&q=80",
-    author: "Rory Fraser • Edinburgh, Scotland",
+    author: "Solas Haven Editorial",
     tags: ["Edinburgh", "Marcus Aurelius", "Stoicism", "Saved Life"],
     sections: [
       {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Sparkles, X, HeartHandshake } from "lucide-react";
 import { LetterCategory } from "../lib/types";
 
@@ -9,17 +9,9 @@ interface ResonanceToastProps {
   onClose: () => void;
 }
 
-const CITIES = ["Tokyo", "Berlin", "Paris", "Toronto", "Kyoto", "Buenos Aires", "Reykjavik", "Istanbul", "London", "Melbourne"];
-const TIMES = ["42 minutes ago", "2 hours ago", "earlier tonight", "at sunrise"];
-
 export default function ResonanceToast({ category, onClose }: ResonanceToastProps) {
-  const [city, setCity] = useState("Kyoto");
-  const [time, setTime] = useState("2 hours ago");
-
   useEffect(() => {
     if (category) {
-      setCity(CITIES[Math.floor(Math.random() * CITIES.length)]);
-      setTime(TIMES[Math.floor(Math.random() * TIMES.length)]);
       const timer = setTimeout(() => {
         onClose();
       }, 9000);
@@ -55,7 +47,7 @@ export default function ResonanceToast({ category, onClose }: ResonanceToastProp
               You are not alone in the dark.
             </h5>
             <p className="text-xs text-white/70 leading-relaxed font-serif italic">
-              "Across the oceans in <strong className="text-amber-200 font-sans font-medium">{city}</strong>, another soul released an unspoken letter {time}. Your stars now share the same celestial horizon."
+              "Your unspoken letter now drifts in the same constellation as every letter ever released here. Your stars share the same celestial horizon."
             </p>
           </div>
         </div>

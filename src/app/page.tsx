@@ -218,7 +218,7 @@ export default function HomePage() {
         onWander={handleWander}
         isAudioPlaying={isAudioPlaying}
         onToggleAudio={handleToggleAudio}
-        totalStarsCount={letters.length * 184 + 14200}
+        totalStarsCount={letters.length}
         userStarsCount={userStarIds.length}
         onFocusMyStar={handleFocusMyStar}
         onOpenVigil={() => setIsVigilOpen(true)}

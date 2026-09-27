@@ -30,7 +30,7 @@ const FAQ_LIST: FAQItem[] = [
   {
     question: "What happens to my letter once released?",
     answer:
-      "Your letter is assigned 3D celestial coordinates based on its emotional constellation (Grief, Love, Silent Prayer, Forgiveness, or Unsent Words). It drifts gently in the obsidian starlight alongside thousands of letters from across 195+ nations, where passersby can read it, send you light, or leave sacred prayers."
+      "Your letter is assigned 3D celestial coordinates based on its emotional constellation (Grief, Love, Silent Prayer, Forgiveness, or Unsent Words). It drifts gently in the obsidian starlight, where passersby can read it, send you light, or leave sacred prayers."
   },
   {
     question: "How does the 432Hz sound therapy work?",

@@ -10,7 +10,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1200&auto=format&fit=crop&q=80",
-    author: "Editorial Desk • Zaviyan",
+    author: "Solas Haven Editorial",
     tags: ["Prayer", "Night", "Solace", "Divine"],
     sections: [
       {
@@ -48,7 +48,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1541432901042-2d8bd64b4a9b?w=1200&auto=format&fit=crop&q=80",
-    author: "Yusuf Demir • Istanbul, Turkey",
+    author: "Solas Haven Editorial",
     tags: ["Istanbul", "Fatih", "Bankruptcy", "Faith"],
     sections: [
       {
@@ -85,7 +85,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1538485399081-7191377e8241?w=1200&auto=format&fit=crop&q=80",
-    author: "Min-jun Park • Seoul, South Korea",
+    author: "Solas Haven Editorial",
     tags: ["Seoul", "Han River", "Hope", "Second Chance"],
     sections: [
       {
@@ -122,7 +122,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1200&auto=format&fit=crop&q=80",
-    author: "Marcus Washington • Chicago, Illinois",
+    author: "Solas Haven Editorial",
     tags: ["Fatherhood", "Hospital", "Pediatric ICU", "Grace"],
     sections: [
       {
@@ -158,7 +158,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1200&auto=format&fit=crop&q=80",
-    author: "Brahim Al-Fassi • Merzouga, Morocco",
+    author: "Solas Haven Editorial",
     tags: ["Sahara", "Desert", "Milky Way", "Humility"],
     sections: [
       {
@@ -195,7 +195,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=80",
-    author: "Gudrun Sigurdardottir • Reykjavik, Iceland",
+    author: "Solas Haven Editorial",
     tags: ["Iceland", "Fishermen", "Blizzard", "Endurance"],
     sections: [
       {
@@ -232,7 +232,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1200&auto=format&fit=crop&q=80",
-    author: "Ines Ribeiro • Lisbon, Portugal",
+    author: "Solas Haven Editorial",
     tags: ["Lisbon", "Tram 28", "Rosary", "Generations"],
     sections: [
       {
@@ -270,7 +270,7 @@ export const PRAYER_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Spiritual Solace",
     coverImage: "https://images.unsplash.com/photo-1517840905240-472988babdf9?w=1200&auto=format&fit=crop&q=80",
-    author: "Anthony Rossi • New York, NY",
+    author: "Solas Haven Editorial",
     tags: ["New York", "Cathedral", "Poverty", "Human Kindness"],
     sections: [
       {

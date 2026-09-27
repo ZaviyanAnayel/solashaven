@@ -10,7 +10,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1200&auto=format&fit=crop&q=80",
-    author: "Editorial Desk • Zaviyan",
+    author: "Solas Haven Editorial",
     tags: ["Grief", "Philosophy", "Catharsis", "Eternity"],
     sections: [
       {
@@ -32,8 +32,8 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
       {
         heading: "The Sanctuary of Shared Sorrow",
         paragraphs: [
-          "On Solas Haven, thousands of these letters drift in deep obsidian starlight. When you read a letter written by a father in Florence to his unborn daughter Sophia, or a daughter in Manchester touching her father's old watch on her graduation day, something sacred occurs.",
-          "You realize that your private agony is not an isolating defect. It is the universal tax of love. Every star in this digital sky is proof that someone loved deeply enough to hurt, and was courageous enough to leave an eternal beacon behind.",
+          "On Solas Haven, these letters drift in deep obsidian starlight. When you read a letter written to a departed parent or a daughter touching her father's old watch on graduation day, something sacred occurs.",
+          "You realize that your private agony is not an isolating defect. It is the universal tax of love. Every star in this celestial sky is proof that someone loved deeply enough to hurt, and was courageous enough to leave an eternal beacon behind.",
           "Brew the tea anyway. Say the words out loud. Release your star into the cosmos. The dead may not speak back in earthly tongues, but in the silence of your heart, you will know that they heard."
         ]
       }
@@ -42,13 +42,13 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
   {
     slug: "the-teacup-on-the-counter",
     title: "The Teacup on the Counter: Three Years in Kyoto Without My Mother",
-    subtitle: "A true story of how grief hides inside ordinary kitchen porcelain and why I still boil water for two.",
+    subtitle: "A reflection on how grief hides inside ordinary kitchen porcelain and why I still boil water for two.",
     excerpt: "I bought the apartment with the wide window she always prayed for. But every morning when the kettle whistles, my hand reaches for two ceramic cups before my memory catches up with reality.",
     readTime: "7 min read",
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1545048702-79360700129e?w=1200&auto=format&fit=crop&q=80",
-    author: "Kaito Shimizu • Kyoto, Japan",
+    author: "Solas Haven Editorial",
     tags: ["Mother", "Kyoto", "Tea", "Quiet Grief"],
     sections: [
       {
@@ -85,7 +85,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1200&auto=format&fit=crop&q=80",
-    author: "Liam Campbell • Manchester, UK",
+    author: "Solas Haven Editorial",
     tags: ["Father", "Manchester", "Graduation", "Sacrifice"],
     sections: [
       {
@@ -122,7 +122,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=1200&auto=format&fit=crop&q=80",
-    author: "Matteo & Giulia • Florence, Italy",
+    author: "Solas Haven Editorial",
     tags: ["Sophia", "Florence", "Stillborn", "Silent Love"],
     sections: [
       {
@@ -159,7 +159,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1508672019048-805c876b67e2?w=1200&auto=format&fit=crop&q=80",
-    author: "Tarek Mansoor • Cairo, Egypt",
+    author: "Solas Haven Editorial",
     tags: ["Grandmother", "Cairo", "Jasmine", "Ancestral Memory"],
     sections: [
       {
@@ -196,7 +196,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200&auto=format&fit=crop&q=80",
-    author: "Carlos Morales • Madrid, Spain",
+    author: "Solas Haven Editorial",
     tags: ["Wife", "Madrid", "Home", "Kitchen Grief"],
     sections: [
       {
@@ -233,7 +233,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=1200&auto=format&fit=crop&q=80",
-    author: "Mary O'Donnell • Dublin, Ireland",
+    author: "Solas Haven Editorial",
     tags: ["Marriage", "Dublin", "Loneliness", "Lifelong Love"],
     sections: [
       {
@@ -270,7 +270,7 @@ export const GRIEF_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Grief & Memory",
     coverImage: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=1200&auto=format&fit=crop&q=80",
-    author: "David Chen • Toronto, Canada",
+    author: "Solas Haven Editorial",
     tags: ["Brother", "Toronto", "Voicemail", "Regret"],
     sections: [
       {

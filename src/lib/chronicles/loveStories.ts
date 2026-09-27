@@ -10,7 +10,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=1200&auto=format&fit=crop&q=80",
-    author: "Editorial Desk • Zaviyan",
+    author: "Solas Haven Editorial",
     tags: ["Psychology", "Zeigarnik", "Longing", "Memory"],
     sections: [
       {
@@ -56,7 +56,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=1200&auto=format&fit=crop&q=80",
-    author: "Ayla Vance • Seattle, Washington",
+    author: "Solas Haven Editorial",
     tags: ["Rain", "Seattle", "Stranger Love", "Pacific Northwest"],
     sections: [
       {
@@ -94,7 +94,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&auto=format&fit=crop&q=80",
-    author: "Mateo Rossi • Buenos Aires, Argentina",
+    author: "Solas Haven Editorial",
     tags: ["Buenos Aires", "San Telmo", "Dance", "Saudade"],
     sections: [
       {
@@ -131,7 +131,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?w=1200&auto=format&fit=crop&q=80",
-    author: "Julian Vance • Brooklyn, New York",
+    author: "Solas Haven Editorial",
     tags: ["New York", "Subway", "Q Train", "Fleeting Connection"],
     sections: [
       {
@@ -168,7 +168,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&auto=format&fit=crop&q=80",
-    author: "Hamish MacLeod • Edinburgh, Scotland",
+    author: "Solas Haven Editorial",
     tags: ["Edinburgh", "Best Man", "Wedding", "Secret Heartache"],
     sections: [
       {
@@ -205,7 +205,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?w=1200&auto=format&fit=crop&q=80",
-    author: "Haruto Sato • Tokyo, Japan",
+    author: "Solas Haven Editorial",
     tags: ["Tokyo", "Shibuya", "High School", "Origami Crane"],
     sections: [
       {
@@ -242,7 +242,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=80",
-    author: "Nour Haddad • Beirut, Lebanon",
+    author: "Solas Haven Editorial",
     tags: ["Beirut", "War", "Balcony", "Farewell"],
     sections: [
       {
@@ -278,7 +278,7 @@ export const LOVE_STORIES: ChronicleArticle[] = [
     publishedAt: "September 2026",
     category: "Unspoken Love",
     coverImage: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&auto=format&fit=crop&q=80",
-    author: "Elena Fischer • Frankfurt, Germany",
+    author: "Solas Haven Editorial",
     tags: ["Frankfurt", "Airport", "Transit", "Brief Encounter"],
     sections: [
       {

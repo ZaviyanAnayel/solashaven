@@ -44,7 +44,7 @@ export default function AboutPage() {
             About Solas Haven
           </h1>
           <p className="text-base sm:text-lg text-neutral-300/80 font-serif leading-relaxed">
-            A digital sanctuary where unspoken grief, unconfessed love, and silent prayers across 195+ nations transcend the noise of the internet to become eternal stars.
+            A digital sanctuary where unspoken grief, unconfessed love, and silent prayers from around the world transcend the noise of the internet to become eternal stars.
           </p>
         </header>
 

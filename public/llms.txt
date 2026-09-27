@@ -1,5 +1,5 @@
 # Solas Haven — The Celestial Sanctuary of Unspoken Words & Silent Prayers
-> A sacred, anonymous digital sanctuary where unspoken grief, unsaid goodbyes, secret confessions, and silent prayers ascend into permanent starlight across 195+ nations.
+> A sacred, anonymous digital sanctuary where unspoken grief, unsaid goodbyes, secret confessions, and silent prayers ascend into permanent starlight.
 
 ## Core Features & Architecture
 - **Interactive 3D Celestial Cosmos**: Fully real-time Three.js starlight canvas visualizing thousands of human souls and prayers.
