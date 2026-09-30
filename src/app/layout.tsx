@@ -174,7 +174,7 @@ export default function RootLayout({
         <Script
           id="google-adsense"
           strategy="afterInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3405098265613384"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358272532329016"
           crossOrigin="anonymous"
         />
       </head>
