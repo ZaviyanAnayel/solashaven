@@ -7,6 +7,7 @@ import { FORGIVENESS_STORIES } from "./chronicles/forgivenessStories";
 import { FAMILY_STORIES } from "./chronicles/familyStories";
 import { FUTURE_STORIES } from "./chronicles/futureStories";
 import { ENCOUNTER_STORIES } from "./chronicles/encounterStories";
+import { REGRETS_STORIES } from "./chronicles/regretsStories";
 
 export type { ChronicleArticle };
 
@@ -19,6 +20,7 @@ export const CHRONICLES: ChronicleArticle[] = [
   ...FAMILY_STORIES,
   ...FUTURE_STORIES,
   ...ENCOUNTER_STORIES,
+  ...REGRETS_STORIES,
 ];
 
 export function getChronicleBySlug(slug: string): ChronicleArticle | undefined {
