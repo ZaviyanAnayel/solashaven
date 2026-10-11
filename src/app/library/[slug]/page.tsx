@@ -29,7 +29,7 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${book.title} by ${book.author} (Full Book) | The Sanctuary Library`;
+  const title = `${book.title} by ${book.author} — Read Online Free | Solas Haven Library`;
   const description = book.description;
   const url = `https://www.solashaven.com/library/${slug}`;
 
