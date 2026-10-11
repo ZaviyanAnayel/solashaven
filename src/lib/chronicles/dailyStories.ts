@@ -4,6 +4,59 @@ import { ChronicleArticle } from "./types";
 // The cron worker appends one new article per day. Newest first.
 export const DAILY_STORIES: ChronicleArticle[] = [
   {
+    slug: "the-things-they-left-behind",
+    title: "The Things They Left Behind: Why We Cannot Throw Away What the Dead Once Touched",
+    subtitle: "A father's wristwatch, a mother's scarf, a drawer no one dares to open — the belongings of the departed are not clutter. They are the last rooms the dead still live in.",
+    excerpt: "We do not keep their things because we cannot let go. We keep them because love does not end where a heartbeat stops — and memory needs a physical place to sit.",
+    readTime: "8 min read",
+    publishedAt: "October 2026",
+    category: "Grief & Memory",
+    author: "Solas Haven Editorial",
+    tags: ["Grief", "Memory", "Loss", "Belongings", "Healing"],
+    sections: [
+      {
+        heading: "The Drawer Nobody Opens",
+        paragraphs: [
+          "In almost every grieving household there is a drawer, a wardrobe, or a shelf that has become a small, silent shrine. The clothes hang exactly as they were left. The shoes stand paired. The medicine bottles sit in their rows. Everyone in the house knows: this space is not to be touched, tidied, or explained to guests. It is simply — his. Or hers. Still.",
+          "An outside eye sees clutter waiting to be cleared. But the bereaved see something entirely different. That drawer is not storage. It is the one corner of the world where the person has not yet left. To close it is one thing; to empty it is to perform the departure a second time, this time with your own hands.",
+          "This is why the first great battle of grief is so rarely about tears. It is about the watch, the shawl, the spectacles in their case. The living must decide, object by object, what it means to go on living in a world where these things remain and their owner does not."
+        ]
+      },
+      {
+        heading: "Why a Scarf Still Smells Like Home",
+        paragraphs: [
+          "Of all the senses, smell is the one that grief clings to most fiercely. A scarf worn by a mother, a jacket that belonged to a husband — the living press them to their faces years later, and the scent arrives like a door swinging open. It is a well-documented fact of the human brain that the sense of smell is wired more directly into the centers of memory and emotion than any other sense. The nose does not describe the past. It delivers it, whole and warm, in a single breath.",
+          "That is why the scarf is not a scarf. It is the kitchen on a winter evening. It is the goodbye at the doorway, the laugh from the other room, the hand on the forehead during a fever. One thread of cotton carries an entire architecture of being loved — and the grieving heart, starved of new memories, feeds on whatever the old ones leave behind.",
+          "Science can explain the wiring. It cannot explain why a widow in a small apartment keeps one sweater folded at the foot of her bed for eleven years, taking it out only when the ache becomes unbearable. But grief does not need the explanation. It has the sweater."
+        ]
+      },
+      {
+        heading: "Love Does Not Ask Permission to Continue",
+        paragraphs: [
+          "For most of the twentieth century, the prevailing wisdom of grief psychology — inherited from Freud's early model of mourning — held that healing meant detachment: the bereaved were supposed to sever their emotional ties to the dead in order to move on. In 1996, researchers Dennis Klass, Phyllis Silverman, and Steven Nickman challenged that orthodoxy with the theory of continuing bonds. Studying bereaved people closely, they found that healthy grief was rarely about letting go. It was about renegotiating the relationship — finding a new, enduring connection with someone who is no longer physically present.",
+          "The drawer nobody opens is that theory made visible. The watch that still ticks on a son's wrist is not denial. It is a bond, continuing. The bereaved are not failing to accept reality; they are doing what human beings have done since the first burials with grave goods — insisting, against all evidence, that love is stronger than absence.",
+          "This changes everything about how we should speak to the grieving. The question is never 'when will you clear out the room?' The question is: 'tell me about the things you kept, and what they mean.' Grief is not a mess to be organized. It is a love that has nowhere new to go, so it goes back — to the objects, the rooms, the small warm traces."
+        ]
+      },
+      {
+        heading: "What We Are Really Afraid Of",
+        paragraphs: [
+          "Beneath the surface, the fear of throwing things away is rarely about the things at all. Ask the bereaved, gently, and they will tell you: if I give away his coat, I am afraid the world will stop remembering that he was here. The object is a witness. It testifies. A chair that no one sits in anymore still says, 'someone sat here, and he mattered.'",
+          "There is also a quieter, more tender terror: that we ourselves will forget. Memory is a leaky vessel, and every grieving person knows it. The voice fades first, then the exact shape of the laugh, then the way they said your name. The objects are buoys dropped into deep water, marking the place where something precious went down — so that we can always find our way back to it.",
+          "None of this is weakness. It is the mind doing its sacred work: building a bridge between a past that ended and a love that refuses to."
+        ]
+      },
+      {
+        heading: "Keeping Without Clinging",
+        paragraphs: [
+          "There comes a day — not on any schedule, and never by anyone else's demand — when keeping becomes a choice rather than a reflex. The sweater is still folded at the foot of the bed, but it no longer has to be. The drawer is still there, but the house has started to breathe around it. This is not forgetting. It is the continuing bond finding its mature form: the person carried inside, no longer requiring the objects as proof.",
+          "If you are standing before that drawer today, hear this: you do not have to clear it, and you do not have to keep all of it. Keep the one thing that holds the whole person — the watch, the letter, the scarf — and let the rest go back into the river of the world. The love does not live in the objects. It lives in the one who chose to keep them.",
+          "And when, years from now, you catch the faint scent of them on a cold evening — from a stranger's coat, from a passing wind — you will understand what the drawer always knew. They left things behind. But they also left something in you that no drawer could hold, and no hand could ever throw away."
+        ]
+      }
+    ]
+  },
+  {
     slug: "prayers-for-those-who-hurt-us",
     title: "Prayers for Those Who Hurt Us: The Strange Mercy of Blessing Your Enemies",
     subtitle: "It is the hardest sentence a wounded heart can speak — asking light for the one who handed you the darkness. Here is why it changes the prayer, not the enemy.",
