@@ -193,6 +193,22 @@ export default function HomePage() {
     }
   };
 
+  // Sample star: the first real initial star still present in the
+  // loaded letters (user-released stars are prepended on load, so a
+  // plain letters[0] would not be a founding star). Opening it uses
+  // the same focus + reader path as clicking a star on the canvas.
+  const sampleLetter =
+    letters.find((l) => INITIAL_LETTERS.some((initial) => initial.id === l.id)) ??
+    letters[0] ??
+    null;
+
+  const handleReadSampleStar = () => {
+    if (!sampleLetter) return;
+    soundEngine.playLightShimmer();
+    setFocusedStarId(sampleLetter.id);
+    setSelectedLetter(sampleLetter);
+  };
+
   const handleFocusMyStar = () => {
     if (userStarIds.length === 0) return;
     const currentIndex = userStarIds.findIndex((id) => id === focusedStarId);
@@ -230,7 +246,11 @@ export default function HomePage() {
       />
 
       {/* Poetic homepage intro — visible h1 + sanctuary pathways (SEO) */}
-      <SanctuaryIntro />
+      <SanctuaryIntro
+        onRelease={() => setIsReleaseModalOpen(true)}
+        onReadSampleStar={handleReadSampleStar}
+        sampleRecipient={sampleLetter?.recipient}
+      />
 
       {/* Daily Presence Streak Capsule (Floating Bottom-Left) */}
       <SacredStreakBanner
